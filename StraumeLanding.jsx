@@ -23,13 +23,15 @@ import {
   EyeOff,
   Quote,
   Star,
-  Image as ImageIcon,
   Hammer,
   Waves,
   Paintbrush,
   Users,
   Zap,
   Headphones,
+  ThermometerSun,
+  FileCheck,
+  BadgeCheck,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -164,6 +166,30 @@ const tjenester = [
       privat: 'Alt fra montering og reparasjoner til generelt vedlikehold av bolig og hage.',
     },
   },
+  {
+    icon: ThermometerSun,
+    title: 'Sjekk av varmepumpe og ventilasjon',
+    segments: ['privat'],
+    text: {
+      privat: 'Service og kontroll av varmepumpe, ventilasjon og kanalrens. Vi sørger for at anleggene fungerer optimalt.',
+    },
+  },
+  {
+    icon: BadgeCheck,
+    title: 'Serviceavtale – Prioritert kunde',
+    segments: ['privat'],
+    text: {
+      privat: 'Tegn en serviceavtale fra kr 199,- per måned og bli prioritert kunde hos oss. Kontakt oss for å høre hva som ligger i pakken.',
+    },
+  },
+  {
+    icon: FileCheck,
+    title: 'Boligmappa-dokumentasjon',
+    segments: ['privat'],
+    text: {
+      privat: 'Alt arbeid vi utfører dokumenteres i din Boligmappa. Vi hjelper deg også med å komme i gang med og bruke Boligmappa.',
+    },
+  },
 ];
 
 // ── USPs ──
@@ -196,12 +222,12 @@ const testimonials = [
 ];
 
 const galleryItems = [
-  { id: 1, label: 'Teknisk rom – ventilasjonsanlegg', span: 'md:col-span-2 md:row-span-2' },
-  { id: 2, label: 'Uteområde – parkering og grøntareal', span: '' },
-  { id: 3, label: 'Fasadevedlikehold', span: '' },
-  { id: 4, label: 'Fellesareal – inngangsparti', span: 'md:col-span-2' },
-  { id: 5, label: 'Bassengdrift og vedlikehold', span: '' },
-  { id: 6, label: 'Teknisk inspeksjon', span: '' },
+  { id: 1, label: 'Vedlikehold og drift', span: 'md:col-span-2 md:row-span-2', img: 'https://ucarecdn.com/1f87a414-8ddb-41e2-87dc-5a8b69ee5e1b/IMG_6776.JPG' },
+  { id: 2, label: 'Næringsbygg og fasade', span: '', img: 'https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png' },
+  { id: 3, label: 'Uteområder og grøntanlegg', span: '', img: 'https://ucarecdn.com/150dd219-0350-42fd-b278-b4a8f6c24d26/488624009_17860444113391535_1420075698923640434_n.jpg' },
+  { id: 4, label: 'Teknisk vedlikehold', span: 'md:col-span-2', img: 'https://ucarecdn.com/746bb917-c71f-4f95-a68a-c6ec77cecad2/DSC00529Edit.jpg' },
+  { id: 5, label: 'Bassengdrift og vedlikehold', span: '', img: 'https://ucarecdn.com/2d77d7d9-a4c3-4cd7-b2a2-3d6bbea45f79/485084386_17857408695391535_2129108615804766927_n.jpg' },
+  { id: 6, label: 'Fellesarealer og oppfølging', span: '', img: 'https://ucarecdn.com/5f01fecf-8f6a-46cb-9e8e-ef4d9f8ad15f/491495651_17861233797391535_5667774428046579171_n.jpg' },
 ];
 
 // ── Password gate ──
@@ -648,6 +674,21 @@ export default function StraumeLanding() {
                     privatperson.
                   </p>
                 </div>
+
+                {/* Straumegruppen */}
+                <div className="mt-8 bg-[#292524]/40 rounded-2xl p-6 border border-[#F5F0E8]/5 flex items-center gap-5">
+                  <img
+                    src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png"
+                    alt="Straumegruppen"
+                    className="h-12 shrink-0"
+                  />
+                  <div>
+                    <p className="text-[#C4885C] font-medium text-sm mb-1">Del av Straumegruppen</p>
+                    <p className="text-[#F5F0E8]/60 text-sm leading-relaxed">
+                      I Straumegruppen har vi alle faggruppene du trenger.
+                    </p>
+                  </div>
+                </div>
               </AnimatedSection>
 
               <AnimatedSection delay={0.2}>
@@ -755,11 +796,12 @@ export default function StraumeLanding() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[200px]">
               {galleryItems.map((item, i) => (
                 <AnimatedSection key={item.id} delay={i * 0.08} className={item.span}>
-                  <div className="relative group w-full h-full bg-stone-200 rounded-2xl overflow-hidden border border-stone-100 cursor-pointer">
-                    {/* Placeholder pattern */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-stone-300/50 to-stone-200 flex items-center justify-center">
-                      <ImageIcon size={32} className="text-stone-400/60" />
-                    </div>
+                  <div className="relative group w-full h-full rounded-2xl overflow-hidden border border-stone-100 cursor-pointer">
+                    <img
+                      src={item.img}
+                      alt={item.label}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-[#1C1917]/0 group-hover:bg-[#1C1917]/60 transition-colors duration-300 flex items-end p-5">
                       <p className="text-[#F5F0E8] text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
@@ -936,8 +978,12 @@ export default function StraumeLanding() {
         {/* ════════════════ FOOTER ════════════════ */}
         <footer className="bg-[#171412] border-t border-[#F5F0E8]/5 py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="flex items-center gap-6">
+                <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
+                <div className="w-px h-6 bg-[#F5F0E8]/10" />
+                <img src="https://ucarecdn.com/26c05a59-c86b-42f5-8cd7-cc9641c9d377/Straume_Gruppen_AS_Lys.png" alt="Straumegruppen" className="h-6 opacity-50" />
+              </div>
               <p className="text-[#F5F0E8]/30 text-sm">
                 &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold. Alle rettigheter reservert.
               </p>
