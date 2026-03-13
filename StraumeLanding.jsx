@@ -16,6 +16,9 @@ import {
   Facebook,
   Menu,
   X,
+  Lock,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -96,11 +99,114 @@ const usper = [
   { icon: Heart, title: 'Personlig oppfølging', desc: 'Direkte kontakt og tett dialog – du slipper å forholde deg til et stort system.' },
 ];
 
+// ── Password gate ──
+const SITE_PASSWORD = 'vedlikehold_26';
+
+function PasswordGate({ onUnlock }) {
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password === SITE_PASSWORD) {
+      sessionStorage.setItem('sdv_authenticated', 'true');
+      onUnlock();
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+    }
+  };
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+        .font-display { font-family: 'DM Serif Display', serif; }
+        .font-body { font-family: 'DM Sans', sans-serif; }
+      `}</style>
+      <div className="font-body min-h-screen bg-[#1C1917] flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-10">
+            <div className="w-16 h-16 rounded-2xl bg-[#292524]/60 flex items-center justify-center mx-auto mb-6 border border-[#F5F0E8]/10">
+              <Lock size={28} className="text-[#C4885C]" />
+            </div>
+            <h1 className="font-display text-3xl text-[#F5F0E8] mb-2">
+              Straume <span className="text-[#C4885C]">D&V</span>
+            </h1>
+            <p className="text-[#F5F0E8]/50 text-sm">
+              Siden er under utvikling. Skriv inn passord for å se forhåndsvisningen.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setError(false); }}
+                placeholder="Skriv inn passord"
+                autoFocus
+                className={`w-full bg-[#F5F0E8]/5 border rounded-lg px-4 py-3.5 pr-12 text-[#F5F0E8] placeholder-[#F5F0E8]/25 focus:outline-none transition-colors ${
+                  error
+                    ? 'border-red-400/60 focus:border-red-400/80 focus:ring-1 focus:ring-red-400/30'
+                    : 'border-[#F5F0E8]/10 focus:border-[#C4885C]/50 focus:ring-1 focus:ring-[#C4885C]/30'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F5F0E8]/30 hover:text-[#F5F0E8]/60 transition-colors"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
+            {error && (
+              <p className="text-red-400 text-sm" style={{ animation: 'shake 0.4s ease' }}>
+                Feil passord. Prøv igjen.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-[#6B3B20] via-[#864A28] to-[#A86840] text-white font-medium py-3.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
+            >
+              Gå til siden
+            </button>
+          </form>
+
+          <p className="text-center text-[#F5F0E8]/20 text-xs mt-8">
+            &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold
+          </p>
+        </div>
+
+        <style>{`
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+          }
+        `}</style>
+      </div>
+    </>
+  );
+}
+
 // ── Main component ──
 export default function StraumeLanding() {
+  const [authenticated, setAuthenticated] = useState(
+    () => sessionStorage.getItem('sdv_authenticated') === 'true'
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ navn: '', epost: '', telefon: '', melding: '' });
   const [formSent, setFormSent] = useState(false);
+
+  if (!authenticated) {
+    return <PasswordGate onUnlock={() => setAuthenticated(true)} />;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -130,7 +236,7 @@ export default function StraumeLanding() {
         }
 
         .hero-gradient {
-          background: linear-gradient(165deg, #1B3D2F 0%, #2A5740 40%, #1E4430 70%, #152B21 100%);
+          background: linear-gradient(165deg, #1C1917 0%, #292524 40%, #231F1E 70%, #171412 100%);
         }
 
         .accent-gradient {
@@ -141,7 +247,7 @@ export default function StraumeLanding() {
       <div className="font-body text-stone-800 bg-[#F5F0E8] min-h-screen">
 
         {/* ════════════════ NAVBAR ════════════════ */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1B3D2F]/95 backdrop-blur-md border-b border-white/10">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <button onClick={() => scrollTo('hero')} className="font-display text-xl text-[#F5F0E8] tracking-wide">
               Straume <span className="text-[#C4885C]">D&V</span>
@@ -183,7 +289,7 @@ export default function StraumeLanding() {
 
           {/* Mobile menu */}
           {menuOpen && (
-            <div className="md:hidden bg-[#1B3D2F] border-t border-white/10 px-4 pb-4 space-y-3">
+            <div className="md:hidden bg-[#1C1917] border-t border-white/10 px-4 pb-4 space-y-3">
               {[
                 ['tjenester', 'Tjenester'],
                 ['om', 'Om oss'],
@@ -207,7 +313,7 @@ export default function StraumeLanding() {
           {/* Subtle decorative elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#864A28]/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 -left-20 w-80 h-80 bg-[#2A5740]/30 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 -left-20 w-80 h-80 bg-[#292524]/30 rounded-full blur-3xl" />
           </div>
 
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
@@ -274,10 +380,10 @@ export default function StraumeLanding() {
               {tjenester.map((t, i) => (
                 <AnimatedSection key={t.title} delay={i * 0.1}>
                   <div className="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 hover:shadow-md hover:border-[#864A28]/20 transition-all duration-300 h-full group">
-                    <div className="w-12 h-12 rounded-xl bg-[#1B3D2F]/5 flex items-center justify-center mb-5 group-hover:bg-[#1B3D2F] transition-colors duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-[#1C1917]/5 flex items-center justify-center mb-5 group-hover:bg-[#1C1917] transition-colors duration-300">
                       <t.icon
                         size={22}
-                        className="text-[#1B3D2F] group-hover:text-[#864A28] transition-colors duration-300"
+                        className="text-[#1C1917] group-hover:text-[#864A28] transition-colors duration-300"
                       />
                     </div>
                     <h3 className="font-display text-xl text-stone-900 mb-3">{t.title}</h3>
@@ -290,7 +396,7 @@ export default function StraumeLanding() {
         </section>
 
         {/* ════════════════ OM OSS ════════════════ */}
-        <section id="om" className="py-20 md:py-28 bg-[#1B3D2F] bg-noise relative overflow-hidden">
+        <section id="om" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
           <div className="absolute top-0 right-0 w-72 h-72 bg-[#864A28]/5 rounded-full blur-3xl" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -321,7 +427,7 @@ export default function StraumeLanding() {
               </AnimatedSection>
 
               <AnimatedSection delay={0.2}>
-                <div className="bg-[#2A5740]/40 rounded-2xl p-8 md:p-10 border border-[#F5F0E8]/5">
+                <div className="bg-[#292524]/40 rounded-2xl p-8 md:p-10 border border-[#F5F0E8]/5">
                   <div className="grid grid-cols-2 gap-8">
                     {[
                       ['Automasjon', 'Teknisk styring og regulering'],
@@ -370,7 +476,7 @@ export default function StraumeLanding() {
         </section>
 
         {/* ════════════════ KONTAKT ════════════════ */}
-        <section id="kontakt" className="py-20 md:py-28 bg-[#1B3D2F] bg-noise relative overflow-hidden">
+        <section id="kontakt" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#864A28]/5 rounded-full blur-3xl" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -499,7 +605,7 @@ export default function StraumeLanding() {
                     </div>
                   </div>
 
-                  <div className="bg-[#2A5740]/40 rounded-2xl p-6 border border-[#F5F0E8]/5">
+                  <div className="bg-[#292524]/40 rounded-2xl p-6 border border-[#F5F0E8]/5">
                     <p className="text-[#F5F0E8]/70 text-sm leading-relaxed">
                       Vi tilbyr alltid en uforpliktende samtale for å kartlegge dine behov.
                       Ingen jobb er for liten – ta kontakt, så finner vi en løsning.
@@ -512,7 +618,7 @@ export default function StraumeLanding() {
         </section>
 
         {/* ════════════════ FOOTER ════════════════ */}
-        <footer className="bg-[#152B21] border-t border-[#F5F0E8]/5 py-10">
+        <footer className="bg-[#171412] border-t border-[#F5F0E8]/5 py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="font-display text-lg text-[#F5F0E8]/80">
