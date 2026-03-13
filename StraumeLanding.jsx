@@ -438,60 +438,69 @@ export default function StraumeLanding() {
         </nav>
 
         {/* ════════════════ HERO ════════════════ */}
-        <section id="hero" className="relative min-h-screen flex items-center pt-16">
-          {/* Full-bleed background image */}
-          <div className="absolute inset-0">
-            <img
-              src="https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png"
-              alt=""
-              className="w-full h-full object-cover"
-            />
-            {/* Dark overlay for contrast */}
-            <div className="absolute inset-0 bg-[#1C1917]/40" />
-          </div>
+        <section id="hero" className="bg-[#F5F0E8] bg-noise relative min-h-screen flex items-center pt-16">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 w-full">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+              {/* Left – text */}
+              <div>
+                <AnimatedSection>
+                  <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-4">
+                    Drift & Vedlikehold
+                  </p>
+                </AnimatedSection>
 
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 flex items-center justify-center md:justify-end w-full">
-            {/* Glass card – right side */}
-            <AnimatedSection>
-              <div
-                className="backdrop-blur-xl bg-[#1C1917]/40 rounded-3xl p-7 sm:p-9 md:p-11 border border-[#F5F0E8]/10 shadow-2xl shadow-black/20 max-w-lg"
-                style={{ backdropFilter: 'blur(20px) saturate(1.2)' }}
-              >
-                <p className="text-[#C4885C] font-medium text-xs tracking-widest uppercase mb-3">
-                  Drift & Vedlikehold
-                </p>
+                <AnimatedSection delay={0.1}>
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-stone-900 leading-tight">
+                    Pålitelig drift og vedlikehold for{' '}
+                    <span className="text-[#864A28]">næringsbygg</span>
+                  </h1>
+                </AnimatedSection>
 
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#F5F0E8] leading-tight mb-4">
-                  Pålitelig drift og vedlikehold for{' '}
-                  <span className="text-[#C4885C]">næringsbygg</span>
-                </h1>
+                <AnimatedSection delay={0.2}>
+                  <p className="mt-6 text-lg md:text-xl text-stone-500 max-w-xl leading-relaxed">
+                    Vi sørger for at bygget ditt fungerer som det skal – hver dag.
+                    Fleksible løsninger tilpasset ditt behov.
+                  </p>
+                </AnimatedSection>
 
-                <p className="text-base md:text-lg text-[#F5F0E8]/70 leading-relaxed mb-8">
-                  Vi sørger for at bygget ditt fungerer som det skal – hver dag.
-                  Fleksible løsninger tilpasset ditt behov.
-                </p>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={() => scrollTo('kontakt')}
-                    className="accent-gradient text-white font-medium px-6 py-3.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
-                  >
-                    Få et uforpliktende tilbud
-                  </button>
-                  <button
-                    onClick={() => scrollTo('tjenester')}
-                    className="border border-[#F5F0E8]/20 text-[#F5F0E8] font-medium px-6 py-3.5 rounded-lg hover:bg-[#F5F0E8]/10 backdrop-blur-sm transition-colors"
-                  >
-                    Se våre tjenester
-                  </button>
-                </div>
+                <AnimatedSection delay={0.3}>
+                  <div className="mt-10 flex flex-col sm:flex-row gap-4">
+                    <button
+                      onClick={() => scrollTo('kontakt')}
+                      className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
+                    >
+                      Få et uforpliktende tilbud
+                    </button>
+                    <button
+                      onClick={() => scrollTo('tjenester')}
+                      className="border border-stone-300 text-stone-700 font-medium px-8 py-4 rounded-lg text-lg hover:bg-stone-100 transition-colors"
+                    >
+                      Se våre tjenester
+                    </button>
+                  </div>
+                </AnimatedSection>
               </div>
-            </AnimatedSection>
-          </div>
 
-          {/* Scroll indicator */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-            <ChevronDown className="text-[#F5F0E8]/50" size={28} />
+              {/* Right – hero image */}
+              <AnimatedSection delay={0.2}>
+                <div className="relative">
+                  <div className="rounded-2xl overflow-hidden shadow-2xl shadow-stone-400/20 border border-stone-200">
+                    <img
+                      src="https://ucarecdn.com/30e6666b-e74e-4d09-83f2-ae9b21ea2814/hf_20260313_113306_13fd1f2bfdc54c54a6e0ec4201a193aa.jpeg"
+                      alt="Straume Drift & Vedlikehold – profesjonelt vedlikehold av næringsbygg"
+                      className="w-full h-[400px] md:h-[500px] object-cover"
+                    />
+                  </div>
+                  {/* Decorative accent border */}
+                  <div className="absolute -bottom-3 -right-3 w-full h-full rounded-2xl border-2 border-[#864A28]/20 -z-10" />
+                </div>
+              </AnimatedSection>
+            </div>
+
+            {/* Scroll indicator */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+              <ChevronDown className="text-stone-400" size={28} />
+            </div>
           </div>
         </section>
 
@@ -514,10 +523,10 @@ export default function StraumeLanding() {
               {segmenter.map((seg, i) => {
                 const isActive = activeSegment === seg.id;
                 return (
-                  <AnimatedSection key={seg.id} delay={i * 0.1}>
+                  <AnimatedSection key={seg.id} delay={i * 0.1} className="h-full">
                     <button
                       onClick={() => handleSegmentClick(seg.id)}
-                      className={`w-full text-left rounded-2xl p-6 md:p-8 border-2 transition-all duration-300 group cursor-pointer ${
+                      className={`w-full h-full text-left rounded-2xl p-6 md:p-8 border-2 transition-all duration-300 group cursor-pointer ${
                         isActive
                           ? 'border-[#864A28] bg-[#864A28]/5 shadow-lg shadow-[#864A28]/10'
                           : 'border-stone-200 bg-white hover:border-[#864A28]/30 hover:shadow-md hover:-translate-y-1'
