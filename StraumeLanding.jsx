@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Wrench,
   Building2,
+  Home,
+  User,
   Cog,
   TreePine,
   Phone,
@@ -19,6 +21,15 @@ import {
   Lock,
   Eye,
   EyeOff,
+  Quote,
+  Star,
+  Image as ImageIcon,
+  Hammer,
+  Waves,
+  Paintbrush,
+  Users,
+  Zap,
+  Headphones,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -63,40 +74,134 @@ function AnimatedSection({ children, className = '', delay = 0 }) {
   );
 }
 
-// ── Data ──
-const tjenester = [
+// ── Segment definitions ──
+const segmenter = [
   {
-    icon: Clock,
-    title: 'Deltids vaktmestertjenester',
-    desc: 'Fleksibel vaktmesterordning tilpasset ditt behov – enten det er noen timer i uken eller faste dager.',
+    id: 'naering',
+    label: 'Næringsbygg',
+    icon: Building2,
+    desc: 'Driftsavtaler og teknisk vedlikehold for næringseiendommer',
+    formLabel: 'Næringsbygg',
   },
   {
-    icon: Building2,
-    title: 'Vedlikehold av næringsbygg',
-    desc: 'Oppfølging og vedlikehold av bygning, fellesarealer og teknisk infrastruktur.',
+    id: 'borettslag',
+    label: 'Borettslag & sameie',
+    icon: Home,
+    desc: 'Fast vaktmester og forutsigbar oppfølging for fellesarealer',
+    formLabel: 'Borettslag / sameie',
+  },
+  {
+    id: 'privat',
+    label: 'Privat',
+    icon: User,
+    desc: 'Praktisk hjelp, småjobber og vedlikehold for bolig',
+    formLabel: 'Privat',
+  },
+];
+
+// ── Services data with segment-specific text ──
+const tjenester = [
+  {
+    icon: Wrench,
+    title: 'Deltids vaktmestertjenester',
+    segments: ['naering', 'borettslag'],
+    text: {
+      naering: 'Fleksibel vaktmesterordning tilpasset eiendommens behov. Fast kontaktperson med full oversikt.',
+      borettslag: 'Fast vaktmester for borettslaget. Forutsigbar avtale styret kan stole på.',
+    },
+  },
+  {
+    icon: Hammer,
+    title: 'Vedlikehold av bygg og fellesarealer',
+    segments: ['naering', 'borettslag'],
+    text: {
+      naering: 'Systematisk oppfølging og vedlikehold av næringsbygg, fasade og fellesareal.',
+      borettslag: 'Vedlikehold av fellesarealer, trappeoppganger, fasade og tekniske rom.',
+    },
   },
   {
     icon: Cog,
     title: 'Drift av tekniske anlegg',
-    desc: 'Oppfølging av tekniske installasjoner, ventilasjon, varme og tilhørende systemer.',
+    segments: ['naering', 'borettslag'],
+    text: {
+      naering: 'Oppfølging av ventilasjon, varme, kjøling og tekniske installasjoner. Dokumentert og systematisk.',
+      borettslag: 'Oppfølging av heis, ventilasjon, varmeanlegg og andre tekniske systemer i bygget.',
+    },
   },
   {
     icon: TreePine,
     title: 'Uteanlegg og uteområder',
-    desc: 'Vedlikehold av grøntanlegg, parkering, gangveier og tilhørende arealer.',
+    segments: ['naering', 'borettslag'],
+    text: {
+      naering: 'Vedlikehold av grøntanlegg, parkering, gangveier og tilhørende utearealer.',
+      borettslag: 'Stell av fellesområder ute — plen, hekk, parkering og lekeplass.',
+    },
   },
   {
     icon: Phone,
     title: 'Ringe-hjelp / praktisk bistand',
-    desc: 'Rask hjelp ved akutte eller løpende behov – bare en telefon unna.',
+    segments: ['naering', 'borettslag', 'privat'],
+    text: {
+      naering: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
+      borettslag: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
+      privat: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
+    },
+  },
+  {
+    icon: Waves,
+    title: 'Basseng og våtrom',
+    segments: ['naering', 'privat'],
+    text: {
+      naering: 'Drift og vedlikehold av svømmebasseng og badeanlegg. Kompetanse på vannbehandling og regelverk.',
+      privat: 'Service og vedlikehold av privat basseng. Vannkvalitet, filtrering og teknisk oppfølging.',
+    },
+  },
+  {
+    icon: Paintbrush,
+    title: 'Småjobber og vedlikehold',
+    segments: ['privat'],
+    text: {
+      privat: 'Alt fra montering og reparasjoner til generelt vedlikehold av bolig og hage.',
+    },
   },
 ];
 
+// ── USPs ──
 const usper = [
-  { icon: Shield, title: 'Lang erfaring', desc: 'Solid bakgrunn innen automasjon, tekniske anlegg og vedlikehold.' },
-  { icon: Wrench, title: 'Fleksible løsninger', desc: 'Tjenester skreddersydd etter dine behov og budsjett.' },
-  { icon: MapPin, title: 'Lokalkjent', desc: 'God kjennskap til lokale forhold og nettverk i regionen.' },
-  { icon: Heart, title: 'Personlig oppfølging', desc: 'Direkte kontakt og tett dialog – du slipper å forholde deg til et stort system.' },
+  { icon: Users, title: 'Én kontaktperson', desc: 'Du slipper å forholde deg til mange leverandører. Atle har oversikten.' },
+  { icon: Shield, title: 'Fleksible avtaler', desc: 'Tilpasset ditt behov — fra faste driftsavtaler til hjelp ved behov.' },
+  { icon: Zap, title: 'Rask respons', desc: 'Kort vei fra telefon til handling. Vi stiller opp når det haster.' },
+  { icon: Cog, title: 'Teknisk kompetanse', desc: 'Solid erfaring med automasjon, tekniske anlegg og regelverk.' },
+];
+
+const testimonials = [
+  {
+    name: 'Kari Haugen',
+    role: 'Daglig leder, Haugen Eiendom AS',
+    text: 'Atle har vært uvurderlig for oss. Bygget vårt har aldri vært i bedre stand, og vi slipper å bekymre oss for tekniske problemer. Rask respons og alltid grundig.',
+    rating: 5,
+  },
+  {
+    name: 'Thomas Berg',
+    role: 'Styreleder, Straume Næringspark',
+    text: 'Vi gikk fra å ha tre forskjellige leverandører til én. Straume D&V tar seg av alt – fra ventilasjonsanlegget til grøntområdene. Enklere og billigere for oss.',
+    rating: 5,
+  },
+  {
+    name: 'Lise Moen',
+    role: 'Eiendomsforvalter, Sotra Invest',
+    text: 'Profesjonell, pålitelig og fleksibel. Atle forstår hva næringsbygg trenger og er alltid tilgjengelig når noe haster. Anbefales på det varmeste.',
+    rating: 5,
+  },
+];
+
+const galleryItems = [
+  { id: 1, label: 'Teknisk rom – ventilasjonsanlegg', span: 'md:col-span-2 md:row-span-2' },
+  { id: 2, label: 'Uteområde – parkering og grøntareal', span: '' },
+  { id: 3, label: 'Fasadevedlikehold', span: '' },
+  { id: 4, label: 'Fellesareal – inngangsparti', span: 'md:col-span-2' },
+  { id: 5, label: 'Bassengdrift og vedlikehold', span: '' },
+  { id: 6, label: 'Teknisk inspeksjon', span: '' },
 ];
 
 // ── Password gate ──
@@ -131,9 +236,7 @@ function PasswordGate({ onUnlock }) {
             <div className="w-16 h-16 rounded-2xl bg-[#292524]/60 flex items-center justify-center mx-auto mb-6 border border-[#F5F0E8]/10">
               <Lock size={28} className="text-[#C4885C]" />
             </div>
-            <h1 className="font-display text-3xl text-[#F5F0E8] mb-2">
-              Straume <span className="text-[#C4885C]">D&V</span>
-            </h1>
+            <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-10 mx-auto mb-2" />
             <p className="text-[#F5F0E8]/50 text-sm">
               Siden er under utvikling. Skriv inn passord for å se forhåndsvisningen.
             </p>
@@ -201,7 +304,8 @@ export default function StraumeLanding() {
     () => sessionStorage.getItem('sdv_authenticated') === 'true'
   );
   const [menuOpen, setMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({ navn: '', epost: '', telefon: '', melding: '' });
+  const [activeSegment, setActiveSegment] = useState(null);
+  const [formData, setFormData] = useState({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
   const [formSent, setFormSent] = useState(false);
 
   if (!authenticated) {
@@ -212,12 +316,37 @@ export default function StraumeLanding() {
     e.preventDefault();
     setFormSent(true);
     setTimeout(() => setFormSent(false), 4000);
-    setFormData({ navn: '', epost: '', telefon: '', melding: '' });
+    setFormData({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
   };
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setMenuOpen(false);
+  };
+
+  const handleSegmentClick = (segmentId) => {
+    setActiveSegment(segmentId);
+    // Auto-fill form dropdown
+    const seg = segmenter.find(s => s.id === segmentId);
+    if (seg) {
+      setFormData(prev => ({ ...prev, segment: seg.formLabel }));
+    }
+    // Scroll to tjenester
+    setTimeout(() => scrollTo('tjenester'), 100);
+  };
+
+  // Filter services based on active segment
+  const filteredTjenester = activeSegment
+    ? tjenester.filter(t => t.segments.includes(activeSegment))
+    : tjenester;
+
+  // Get the right description text for a service
+  const getServiceText = (service) => {
+    if (activeSegment && service.text[activeSegment]) {
+      return service.text[activeSegment];
+    }
+    // Default: use næring text, then first available
+    return service.text.naering || Object.values(service.text)[0];
   };
 
   return (
@@ -235,10 +364,6 @@ export default function StraumeLanding() {
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
         }
 
-        .hero-gradient {
-          background: linear-gradient(165deg, #1C1917 0%, #292524 40%, #231F1E 70%, #171412 100%);
-        }
-
         .accent-gradient {
           background: linear-gradient(135deg, #6B3B20 0%, #864A28 50%, #A86840 100%);
         }
@@ -249,8 +374,8 @@ export default function StraumeLanding() {
         {/* ════════════════ NAVBAR ════════════════ */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-            <button onClick={() => scrollTo('hero')} className="font-display text-xl text-[#F5F0E8] tracking-wide">
-              Straume <span className="text-[#C4885C]">D&V</span>
+            <button onClick={() => scrollTo('hero')}>
+              <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-8" />
             </button>
 
             {/* Desktop nav */}
@@ -259,6 +384,8 @@ export default function StraumeLanding() {
                 ['tjenester', 'Tjenester'],
                 ['om', 'Om oss'],
                 ['hvorfor', 'Hvorfor oss'],
+                ['referanser', 'Referanser'],
+                ['galleri', 'Galleri'],
                 ['kontakt', 'Kontakt'],
               ].map(([id, label]) => (
                 <button
@@ -294,6 +421,8 @@ export default function StraumeLanding() {
                 ['tjenester', 'Tjenester'],
                 ['om', 'Om oss'],
                 ['hvorfor', 'Hvorfor oss'],
+                ['referanser', 'Referanser'],
+                ['galleri', 'Galleri'],
                 ['kontakt', 'Kontakt'],
               ].map(([id, label]) => (
                 <button
@@ -309,60 +438,135 @@ export default function StraumeLanding() {
         </nav>
 
         {/* ════════════════ HERO ════════════════ */}
-        <section id="hero" className="hero-gradient bg-noise relative min-h-screen flex items-center pt-16">
-          {/* Subtle decorative elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute -top-20 -right-20 w-96 h-96 bg-[#864A28]/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-20 -left-20 w-80 h-80 bg-[#292524]/30 rounded-full blur-3xl" />
+        <section id="hero" className="relative min-h-screen flex items-center pt-16">
+          {/* Full-bleed background image */}
+          <div className="absolute inset-0">
+            <img
+              src="https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png"
+              alt=""
+              className="w-full h-full object-cover"
+            />
+            {/* Dark overlay for contrast */}
+            <div className="absolute inset-0 bg-[#1C1917]/40" />
           </div>
 
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 flex items-center justify-center md:justify-end w-full">
+            {/* Glass card – right side */}
             <AnimatedSection>
-              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-4">
-                Drift & Vedlikehold
-              </p>
-            </AnimatedSection>
+              <div
+                className="backdrop-blur-xl bg-[#1C1917]/40 rounded-3xl p-7 sm:p-9 md:p-11 border border-[#F5F0E8]/10 shadow-2xl shadow-black/20 max-w-lg"
+                style={{ backdropFilter: 'blur(20px) saturate(1.2)' }}
+              >
+                <p className="text-[#C4885C] font-medium text-xs tracking-widest uppercase mb-3">
+                  Drift & Vedlikehold
+                </p>
 
-            <AnimatedSection delay={0.1}>
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#F5F0E8] leading-tight max-w-3xl">
-                Pålitelig drift og vedlikehold for{' '}
-                <span className="text-[#C4885C]">næringsbygg</span>
-              </h1>
-            </AnimatedSection>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#F5F0E8] leading-tight mb-4">
+                  Pålitelig drift og vedlikehold for{' '}
+                  <span className="text-[#C4885C]">næringsbygg</span>
+                </h1>
 
-            <AnimatedSection delay={0.2}>
-              <p className="mt-6 text-lg md:text-xl text-[#F5F0E8]/70 max-w-xl leading-relaxed">
-                Vi sørger for at bygget ditt fungerer som det skal – hver dag.
-                Fleksible løsninger tilpasset ditt behov.
-              </p>
-            </AnimatedSection>
+                <p className="text-base md:text-lg text-[#F5F0E8]/70 leading-relaxed mb-8">
+                  Vi sørger for at bygget ditt fungerer som det skal – hver dag.
+                  Fleksible løsninger tilpasset ditt behov.
+                </p>
 
-            <AnimatedSection delay={0.3}>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => scrollTo('kontakt')}
-                  className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
-                >
-                  Få et uforpliktende tilbud
-                </button>
-                <button
-                  onClick={() => scrollTo('tjenester')}
-                  className="border border-[#F5F0E8]/20 text-[#F5F0E8] font-medium px-8 py-4 rounded-lg text-lg hover:bg-[#F5F0E8]/5 transition-colors"
-                >
-                  Se våre tjenester
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    onClick={() => scrollTo('kontakt')}
+                    className="accent-gradient text-white font-medium px-6 py-3.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
+                  >
+                    Få et uforpliktende tilbud
+                  </button>
+                  <button
+                    onClick={() => scrollTo('tjenester')}
+                    className="border border-[#F5F0E8]/20 text-[#F5F0E8] font-medium px-6 py-3.5 rounded-lg hover:bg-[#F5F0E8]/10 backdrop-blur-sm transition-colors"
+                  >
+                    Se våre tjenester
+                  </button>
+                </div>
               </div>
             </AnimatedSection>
+          </div>
 
-            {/* Scroll indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-              <ChevronDown className="text-[#F5F0E8]/30" size={28} />
+          {/* Scroll indicator */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <ChevronDown className="text-[#F5F0E8]/50" size={28} />
+          </div>
+        </section>
+
+        {/* ════════════════ SEGMENTVELGER ════════════════ */}
+        <section className="py-16 md:py-20 bg-[#F5F0E8] bg-noise">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection>
+              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">
+                Hvem er du?
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-4">
+                Velg ditt segment
+              </h2>
+              <p className="text-stone-500 text-center max-w-2xl mx-auto mb-12">
+                Vi tilpasser tjenestene våre etter hvem du er. Velg nedenfor for å se hva vi kan tilby deg.
+              </p>
+            </AnimatedSection>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+              {segmenter.map((seg, i) => {
+                const isActive = activeSegment === seg.id;
+                return (
+                  <AnimatedSection key={seg.id} delay={i * 0.1}>
+                    <button
+                      onClick={() => handleSegmentClick(seg.id)}
+                      className={`w-full text-left rounded-2xl p-6 md:p-8 border-2 transition-all duration-300 group cursor-pointer ${
+                        isActive
+                          ? 'border-[#864A28] bg-[#864A28]/5 shadow-lg shadow-[#864A28]/10'
+                          : 'border-stone-200 bg-white hover:border-[#864A28]/30 hover:shadow-md hover:-translate-y-1'
+                      }`}
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 ${
+                        isActive
+                          ? 'accent-gradient'
+                          : 'bg-[#1C1917]/5 group-hover:bg-[#1C1917]'
+                      }`}>
+                        <seg.icon
+                          size={22}
+                          className={`transition-colors duration-300 ${
+                            isActive
+                              ? 'text-white'
+                              : 'text-[#1C1917] group-hover:text-[#864A28]'
+                          }`}
+                        />
+                      </div>
+                      <h3 className={`font-display text-xl mb-2 transition-colors duration-300 ${
+                        isActive ? 'text-[#864A28]' : 'text-stone-900'
+                      }`}>
+                        {seg.label}
+                      </h3>
+                      <p className="text-stone-500 text-sm leading-relaxed">{seg.desc}</p>
+                    </button>
+                  </AnimatedSection>
+                );
+              })}
             </div>
+
+            {activeSegment && (
+              <div className="text-center mt-6">
+                <button
+                  onClick={() => {
+                    setActiveSegment(null);
+                    setFormData(prev => ({ ...prev, segment: '' }));
+                  }}
+                  className="text-stone-400 hover:text-[#864A28] text-sm transition-colors"
+                >
+                  Vis alle tjenester
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
         {/* ════════════════ TJENESTER ════════════════ */}
-        <section id="tjenester" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise">
+        <section id="tjenester" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise -mt-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
               <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">
@@ -372,13 +576,24 @@ export default function StraumeLanding() {
                 Våre tjenester
               </h2>
               <p className="text-stone-500 text-center max-w-2xl mx-auto mb-16">
-                Fra daglig drift til akutt bistand – vi dekker alle behov knyttet til vedlikehold av næringsbygg og uteområder.
+                {activeSegment
+                  ? `Tjenester tilpasset ${segmenter.find(s => s.id === activeSegment)?.label.toLowerCase()}.`
+                  : 'Fra daglig drift til akutt bistand – vi dekker alle behov knyttet til vedlikehold og drift.'
+                }
               </p>
             </AnimatedSection>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tjenester.map((t, i) => (
-                <AnimatedSection key={t.title} delay={i * 0.1}>
+              {filteredTjenester.map((t, i) => (
+                <div
+                  key={t.title}
+                  className="animate-fade-in"
+                  style={{
+                    animation: 'fadeIn 0.3s ease forwards',
+                    animationDelay: `${i * 0.05}s`,
+                    opacity: 0,
+                  }}
+                >
                   <div className="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 hover:shadow-md hover:border-[#864A28]/20 transition-all duration-300 h-full group">
                     <div className="w-12 h-12 rounded-xl bg-[#1C1917]/5 flex items-center justify-center mb-5 group-hover:bg-[#1C1917] transition-colors duration-300">
                       <t.icon
@@ -387,12 +602,19 @@ export default function StraumeLanding() {
                       />
                     </div>
                     <h3 className="font-display text-xl text-stone-900 mb-3">{t.title}</h3>
-                    <p className="text-stone-500 leading-relaxed text-sm">{t.desc}</p>
+                    <p className="text-stone-500 leading-relaxed text-sm">{getServiceText(t)}</p>
                   </div>
-                </AnimatedSection>
+                </div>
               ))}
             </div>
           </div>
+
+          <style>{`
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(12px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
         </section>
 
         {/* ════════════════ OM OSS ════════════════ */}
@@ -410,18 +632,11 @@ export default function StraumeLanding() {
                 </h2>
                 <div className="space-y-4 text-[#F5F0E8]/70 leading-relaxed">
                   <p>
-                    Straume Drift & Vedlikehold drives av Atle, som har lang og bred erfaring
-                    innen automasjon, tekniske løsninger, bassengdrift og tilhørende regelverk.
-                  </p>
-                  <p>
-                    Med solid kompetanse innen tekniske anlegg og en praktisk tilnærming til
-                    problemløsning, leverer vi pålitelige tjenester som holder bygget ditt i
-                    topp stand – uten at du trenger å tenke på det.
-                  </p>
-                  <p>
-                    Vårt første fokusområde er næringsbygg med tilhørende uteområder, der vi
-                    tilbyr alt fra løpende vaktmestertjenester til oppfølging av tekniske
-                    installasjoner.
+                    Straume Drift & Vedlikehold drives av Atle, som har lang erfaring innen
+                    automasjon, tekniske anlegg og praktisk vedlikehold. Med bakgrunn fra drift
+                    av basseng, tekniske styringssystemer og bygningsvedlikehold, tilbyr vi en
+                    bred og pålitelig tjeneste — enten du er næringsaktør, borettslag eller
+                    privatperson.
                   </p>
                 </div>
               </AnimatedSection>
@@ -475,6 +690,80 @@ export default function StraumeLanding() {
           </div>
         </section>
 
+        {/* ════════════════ TESTIMONIALS ════════════════ */}
+        <section id="referanser" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-80 h-80 bg-[#864A28]/5 rounded-full blur-3xl" />
+
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <AnimatedSection>
+              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3 text-center">
+                Referanser
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-16">
+                Hva kundene sier
+              </h2>
+            </AnimatedSection>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {testimonials.map((t, i) => (
+                <AnimatedSection key={t.name} delay={i * 0.1}>
+                  <div className="bg-[#292524]/50 rounded-2xl p-8 border border-[#F5F0E8]/5 h-full flex flex-col">
+                    <Quote size={28} className="text-[#864A28]/40 mb-4" />
+                    <p className="text-[#F5F0E8]/70 leading-relaxed text-sm flex-1 mb-6">
+                      &ldquo;{t.text}&rdquo;
+                    </p>
+                    <div className="flex items-center gap-1 mb-4">
+                      {Array.from({ length: t.rating }).map((_, j) => (
+                        <Star key={j} size={14} className="text-[#C4885C] fill-[#C4885C]" />
+                      ))}
+                    </div>
+                    <div>
+                      <p className="font-medium text-[#F5F0E8] text-sm">{t.name}</p>
+                      <p className="text-[#F5F0E8]/40 text-xs">{t.role}</p>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════ GALLERI ════════════════ */}
+        <section id="galleri" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <AnimatedSection>
+              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">
+                Vårt arbeid
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-4">
+                Galleri
+              </h2>
+              <p className="text-stone-500 text-center max-w-2xl mx-auto mb-16">
+                Et utvalg av prosjekter og oppdrag vi har utført for våre kunder.
+              </p>
+            </AnimatedSection>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[200px]">
+              {galleryItems.map((item, i) => (
+                <AnimatedSection key={item.id} delay={i * 0.08} className={item.span}>
+                  <div className="relative group w-full h-full bg-stone-200 rounded-2xl overflow-hidden border border-stone-100 cursor-pointer">
+                    {/* Placeholder pattern */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-stone-300/50 to-stone-200 flex items-center justify-center">
+                      <ImageIcon size={32} className="text-stone-400/60" />
+                    </div>
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-[#1C1917]/0 group-hover:bg-[#1C1917]/60 transition-colors duration-300 flex items-end p-5">
+                      <p className="text-[#F5F0E8] text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        {item.label}
+                      </p>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ════════════════ KONTAKT ════════════════ */}
         <section id="kontakt" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#864A28]/5 rounded-full blur-3xl" />
@@ -496,6 +785,24 @@ export default function StraumeLanding() {
               {/* Contact form */}
               <AnimatedSection className="md:col-span-3">
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Segment dropdown */}
+                  <div>
+                    <label className="block text-[#F5F0E8]/60 text-sm mb-2">Jeg kontakter som...</label>
+                    <div className="relative">
+                      <select
+                        value={formData.segment}
+                        onChange={(e) => setFormData({ ...formData, segment: e.target.value })}
+                        className="w-full bg-[#F5F0E8]/5 border border-[#F5F0E8]/10 rounded-lg px-4 py-3 text-[#F5F0E8] focus:outline-none focus:border-[#C4885C]/50 focus:ring-1 focus:ring-[#C4885C]/30 transition-colors appearance-none cursor-pointer"
+                      >
+                        <option value="" className="bg-[#1C1917]">Velg segment</option>
+                        <option value="Næringsbygg" className="bg-[#1C1917]">Næringsbygg</option>
+                        <option value="Borettslag / sameie" className="bg-[#1C1917]">Borettslag / sameie</option>
+                        <option value="Privat" className="bg-[#1C1917]">Privat</option>
+                      </select>
+                      <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F5F0E8]/30 pointer-events-none" />
+                    </div>
+                  </div>
+
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-[#F5F0E8]/60 text-sm mb-2">Navn</label>
@@ -509,25 +816,25 @@ export default function StraumeLanding() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#F5F0E8]/60 text-sm mb-2">E-post</label>
+                      <label className="block text-[#F5F0E8]/60 text-sm mb-2">Telefon</label>
                       <input
-                        type="email"
-                        required
-                        value={formData.epost}
-                        onChange={(e) => setFormData({ ...formData, epost: e.target.value })}
+                        type="tel"
+                        value={formData.telefon}
+                        onChange={(e) => setFormData({ ...formData, telefon: e.target.value })}
                         className="w-full bg-[#F5F0E8]/5 border border-[#F5F0E8]/10 rounded-lg px-4 py-3 text-[#F5F0E8] placeholder-[#F5F0E8]/20 focus:outline-none focus:border-[#C4885C]/50 focus:ring-1 focus:ring-[#C4885C]/30 transition-colors"
-                        placeholder="din@epost.no"
+                        placeholder="Ditt telefonnummer"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[#F5F0E8]/60 text-sm mb-2">Telefon</label>
+                    <label className="block text-[#F5F0E8]/60 text-sm mb-2">E-post</label>
                     <input
-                      type="tel"
-                      value={formData.telefon}
-                      onChange={(e) => setFormData({ ...formData, telefon: e.target.value })}
+                      type="email"
+                      required
+                      value={formData.epost}
+                      onChange={(e) => setFormData({ ...formData, epost: e.target.value })}
                       className="w-full bg-[#F5F0E8]/5 border border-[#F5F0E8]/10 rounded-lg px-4 py-3 text-[#F5F0E8] placeholder-[#F5F0E8]/20 focus:outline-none focus:border-[#C4885C]/50 focus:ring-1 focus:ring-[#C4885C]/30 transition-colors"
-                      placeholder="Ditt telefonnummer"
+                      placeholder="din@epost.no"
                     />
                   </div>
                   <div>
@@ -546,7 +853,7 @@ export default function StraumeLanding() {
                     className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20 flex items-center gap-2"
                   >
                     <Send size={18} />
-                    Send melding
+                    Send henvendelse
                   </button>
                   {formSent && (
                     <p className="text-[#C4885C] text-sm mt-2">
@@ -621,9 +928,7 @@ export default function StraumeLanding() {
         <footer className="bg-[#171412] border-t border-[#F5F0E8]/5 py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="font-display text-lg text-[#F5F0E8]/80">
-                Straume <span className="text-[#C4885C]">D&V</span>
-              </div>
+              <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
               <p className="text-[#F5F0E8]/30 text-sm">
                 &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold. Alle rettigheter reservert.
               </p>
