@@ -486,7 +486,7 @@ export default function StraumeLanding() {
                 <div className="relative">
                   <div className="rounded-2xl overflow-hidden shadow-2xl shadow-stone-400/20 border border-stone-200">
                     <img
-                      src="https://ucarecdn.com/30e6666b-e74e-4d09-83f2-ae9b21ea2814/hf_20260313_113306_13fd1f2bfdc54c54a6e0ec4201a193aa.jpeg"
+                      src="https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png"
                       alt="Straume Drift & Vedlikehold – profesjonelt vedlikehold av næringsbygg"
                       className="w-full h-[400px] md:h-[500px] object-cover"
                     />
