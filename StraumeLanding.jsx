@@ -22,7 +22,6 @@ import {
   Eye,
   EyeOff,
   Quote,
-  Star,
   Hammer,
   Waves,
   Paintbrush,
@@ -202,22 +201,10 @@ const usper = [
 
 const testimonials = [
   {
-    name: 'Kari Haugen',
-    role: 'Daglig leder, Haugen Eiendom AS',
-    text: 'Atle har vært uvurderlig for oss. Bygget vårt har aldri vært i bedre stand, og vi slipper å bekymre oss for tekniske problemer. Rask respons og alltid grundig.',
-    rating: 5,
-  },
-  {
-    name: 'Thomas Berg',
-    role: 'Styreleder, Straume Næringspark',
-    text: 'Vi gikk fra å ha tre forskjellige leverandører til én. Straume D&V tar seg av alt – fra ventilasjonsanlegget til grøntområdene. Enklere og billigere for oss.',
-    rating: 5,
-  },
-  {
-    name: 'Lise Moen',
-    role: 'Eiendomsforvalter, Sotra Invest',
-    text: 'Profesjonell, pålitelig og fleksibel. Atle forstår hva næringsbygg trenger og er alltid tilgjengelig når noe haster. Anbefales på det varmeste.',
-    rating: 5,
+    name: 'Silvia Høines',
+    role: 'Hotellsjef, Panorama Hotel & Resort',
+    text: 'Atle har jobbet som vaktmester hos oss på Panorama Hotell & Resort. Jeg setter pris på hans fleksibilitet og vilje til å stille opp når behovet melder seg. Han er dyktig til å sette seg inn i nye systemer, og samarbeidet med ham er alltid enkelt og problemfritt.',
+    img: 'https://ucarecdn.com/b2239218-b395-49a5-a7f1-de5286a066f4/ce674af1c8a52d5851ac72b98d73db4333fada114000x6000.avif',
   },
 ];
 
@@ -228,6 +215,9 @@ const galleryItems = [
   { id: 4, label: 'Teknisk vedlikehold', span: 'md:col-span-2', img: 'https://ucarecdn.com/746bb917-c71f-4f95-a68a-c6ec77cecad2/DSC00529Edit.jpg' },
   { id: 5, label: 'Bassengdrift og vedlikehold', span: '', img: 'https://ucarecdn.com/2d77d7d9-a4c3-4cd7-b2a2-3d6bbea45f79/485084386_17857408695391535_2129108615804766927_n.jpg' },
   { id: 6, label: 'Fellesarealer og oppfølging', span: '', img: 'https://ucarecdn.com/5f01fecf-8f6a-46cb-9e8e-ef4d9f8ad15f/491495651_17861233797391535_5667774428046579171_n.jpg' },
+  { id: 7, label: 'SD-anlegg', span: 'md:col-span-2', img: 'https://ucarecdn.com/9b426c7e-a2fa-4af6-9998-0053bfc01444/20260314153923.jpg' },
+  { id: 8, label: 'Energioppfølging', span: '', img: 'https://ucarecdn.com/d4942751-ab2e-4f3e-b00b-ddcd99e86891/20260314153932.jpg' },
+  { id: 9, label: 'Energioppfølging og styring', span: '', img: 'https://ucarecdn.com/fefbeec0-e8f9-4480-a535-10ce99778478/20260314153909.jpg' },
 ];
 
 // ── Password gate ──
@@ -754,27 +744,25 @@ export default function StraumeLanding() {
               </h2>
             </AnimatedSection>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((t, i) => (
-                <AnimatedSection key={t.name} delay={i * 0.1}>
-                  <div className="bg-[#292524]/50 rounded-2xl p-8 border border-[#F5F0E8]/5 h-full flex flex-col">
-                    <Quote size={28} className="text-[#864A28]/40 mb-4" />
-                    <p className="text-[#F5F0E8]/70 leading-relaxed text-sm flex-1 mb-6">
-                      &ldquo;{t.text}&rdquo;
-                    </p>
-                    <div className="flex items-center gap-1 mb-4">
-                      {Array.from({ length: t.rating }).map((_, j) => (
-                        <Star key={j} size={14} className="text-[#C4885C] fill-[#C4885C]" />
-                      ))}
-                    </div>
-                    <div>
-                      <p className="font-medium text-[#F5F0E8] text-sm">{t.name}</p>
-                      <p className="text-[#F5F0E8]/40 text-xs">{t.role}</p>
-                    </div>
+            <AnimatedSection delay={0.1}>
+              <div className="max-w-3xl mx-auto bg-[#292524]/50 rounded-2xl p-8 md:p-12 border border-[#F5F0E8]/5">
+                <Quote size={36} className="text-[#864A28]/40 mb-6" />
+                <p className="text-[#F5F0E8]/80 leading-relaxed text-lg md:text-xl font-display italic mb-8">
+                  &ldquo;{testimonials[0].text}&rdquo;
+                </p>
+                <div className="flex items-center gap-4">
+                  <img
+                    src={testimonials[0].img}
+                    alt={testimonials[0].name}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-[#864A28]/30"
+                  />
+                  <div>
+                    <p className="font-medium text-[#F5F0E8]">{testimonials[0].name}</p>
+                    <p className="text-[#F5F0E8]/50 text-sm">{testimonials[0].role}</p>
                   </div>
-                </AnimatedSection>
-              ))}
-            </div>
+                </div>
+              </div>
+            </AnimatedSection>
           </div>
         </section>
 
