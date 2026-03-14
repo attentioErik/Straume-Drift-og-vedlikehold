@@ -18,9 +18,6 @@ import {
   Facebook,
   Menu,
   X,
-  Lock,
-  Eye,
-  EyeOff,
   Quote,
   Hammer,
   Waves,
@@ -220,113 +217,12 @@ const galleryItems = [
   { id: 9, label: 'Energioppfølging og styring', span: '', img: 'https://ucarecdn.com/fefbeec0-e8f9-4480-a535-10ce99778478/20260314153909.jpg' },
 ];
 
-// ── Password gate ──
-const SITE_PASSWORD = 'vedlikehold_26';
-
-function PasswordGate({ onUnlock }) {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password === SITE_PASSWORD) {
-      sessionStorage.setItem('sdv_authenticated', 'true');
-      onUnlock();
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 2000);
-    }
-  };
-
-  return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
-        .font-display { font-family: 'DM Serif Display', serif; }
-        .font-body { font-family: 'DM Sans', sans-serif; }
-      `}</style>
-      <div className="font-body min-h-screen bg-[#1C1917] flex items-center justify-center px-4">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-10">
-            <div className="w-16 h-16 rounded-2xl bg-[#292524]/60 flex items-center justify-center mx-auto mb-6 border border-[#F5F0E8]/10">
-              <Lock size={28} className="text-[#C4885C]" />
-            </div>
-            <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-10 mx-auto mb-2" />
-            <p className="text-[#F5F0E8]/50 text-sm">
-              Siden er under utvikling. Skriv inn passord for å se forhåndsvisningen.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(false); }}
-                placeholder="Skriv inn passord"
-                autoFocus
-                className={`w-full bg-[#F5F0E8]/5 border rounded-lg px-4 py-3.5 pr-12 text-[#F5F0E8] placeholder-[#F5F0E8]/25 focus:outline-none transition-colors ${
-                  error
-                    ? 'border-red-400/60 focus:border-red-400/80 focus:ring-1 focus:ring-red-400/30'
-                    : 'border-[#F5F0E8]/10 focus:border-[#C4885C]/50 focus:ring-1 focus:ring-[#C4885C]/30'
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F5F0E8]/30 hover:text-[#F5F0E8]/60 transition-colors"
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-
-            {error && (
-              <p className="text-red-400 text-sm" style={{ animation: 'shake 0.4s ease' }}>
-                Feil passord. Prøv igjen.
-              </p>
-            )}
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-[#6B3B20] via-[#864A28] to-[#A86840] text-white font-medium py-3.5 rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20"
-            >
-              Gå til siden
-            </button>
-          </form>
-
-          <p className="text-center text-[#F5F0E8]/20 text-xs mt-8">
-            &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold
-          </p>
-        </div>
-
-        <style>{`
-          @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-6px); }
-            40% { transform: translateX(6px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
-          }
-        `}</style>
-      </div>
-    </>
-  );
-}
-
 // ── Main component ──
 export default function StraumeLanding() {
-  const [authenticated, setAuthenticated] = useState(
-    () => sessionStorage.getItem('sdv_authenticated') === 'true'
-  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSegment, setActiveSegment] = useState(null);
   const [formData, setFormData] = useState({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
   const [formSent, setFormSent] = useState(false);
-
-  if (!authenticated) {
-    return <PasswordGate onUnlock={() => setAuthenticated(true)} />;
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -667,11 +563,13 @@ export default function StraumeLanding() {
 
                 {/* Straumegruppen */}
                 <div className="mt-8 bg-[#292524]/40 rounded-2xl p-6 border border-[#F5F0E8]/5 flex items-center gap-5">
-                  <img
-                    src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png"
-                    alt="Straumegruppen"
-                    className="h-12 shrink-0"
-                  />
+                  <a href="https://www.straumegruppen.no" target="_blank" rel="noopener noreferrer" className="shrink-0">
+                    <img
+                      src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png"
+                      alt="Straumegruppen"
+                      className="h-12"
+                    />
+                  </a>
                   <div>
                     <p className="text-[#C4885C] font-medium text-sm mb-1">Del av Straumegruppen</p>
                     <p className="text-[#F5F0E8]/60 text-sm leading-relaxed">
@@ -970,7 +868,9 @@ export default function StraumeLanding() {
               <div className="flex items-center gap-6">
                 <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
                 <div className="w-px h-6 bg-[#F5F0E8]/10" />
-                <img src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png" alt="Straumegruppen" className="h-6 opacity-50" />
+                <a href="https://www.straumegruppen.no" target="_blank" rel="noopener noreferrer">
+                  <img src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png" alt="Straumegruppen" className="h-6 opacity-50 hover:opacity-80 transition-opacity" />
+                </a>
               </div>
               <p className="text-[#F5F0E8]/30 text-sm">
                 &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold. Alle rettigheter reservert.
@@ -993,6 +893,16 @@ export default function StraumeLanding() {
                   <Facebook size={18} />
                 </a>
               </div>
+            </div>
+            <div className="mt-6 pt-6 border-t border-[#F5F0E8]/5 text-center">
+              <a
+                href="https://www.attentio.no"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#F5F0E8]/20 hover:text-[#F5F0E8]/40 text-xs transition-colors"
+              >
+                Utviklet av attentio
+              </a>
             </div>
           </div>
         </footer>
