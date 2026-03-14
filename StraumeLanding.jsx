@@ -970,7 +970,7 @@ export default function StraumeLanding() {
               <div className="flex items-center gap-6">
                 <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
                 <div className="w-px h-6 bg-[#F5F0E8]/10" />
-                <img src="https://ucarecdn.com/26c05a59-c86b-42f5-8cd7-cc9641c9d377/Straume_Gruppen_AS_Lys.png" alt="Straumegruppen" className="h-6 opacity-50" />
+                <img src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png" alt="Straumegruppen" className="h-6 opacity-50" />
               </div>
               <p className="text-[#F5F0E8]/30 text-sm">
                 &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold. Alle rettigheter reservert.
