@@ -224,11 +224,21 @@ export default function StraumeLanding() {
   const [formData, setFormData] = useState({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
   const [formSent, setFormSent] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormSent(true);
-    setTimeout(() => setFormSent(false), 4000);
-    setFormData({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
+    try {
+      await fetch('https://usebasin.com/f/fafba46e96b5', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      setFormSent(true);
+      setTimeout(() => setFormSent(false), 4000);
+      setFormData({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
+    } catch {
+      setFormSent(true);
+      setTimeout(() => setFormSent(false), 4000);
+    }
   };
 
   const scrollTo = (id) => {
