@@ -28,6 +28,7 @@ import {
   ThermometerSun,
   FileCheck,
   BadgeCheck,
+  CheckCircle,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -233,11 +234,9 @@ export default function StraumeLanding() {
         body: JSON.stringify(formData),
       });
       setFormSent(true);
-      setTimeout(() => setFormSent(false), 4000);
       setFormData({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
     } catch {
       setFormSent(true);
-      setTimeout(() => setFormSent(false), 4000);
     }
   };
 
@@ -731,6 +730,26 @@ export default function StraumeLanding() {
             <div className="grid md:grid-cols-5 gap-12 md:gap-16">
               {/* Contact form */}
               <AnimatedSection className="md:col-span-3">
+                {formSent ? (
+                  <div className="flex flex-col items-center justify-center text-center py-16 px-8 rounded-2xl border border-[#C4885C]/20 bg-gradient-to-br from-[#C4885C]/5 to-transparent">
+                    <div className="w-20 h-20 rounded-full bg-[#C4885C]/10 border border-[#C4885C]/20 flex items-center justify-center mb-6">
+                      <CheckCircle size={40} className="text-[#C4885C]" />
+                    </div>
+                    <h3 className="font-display text-2xl md:text-3xl text-[#F5F0E8] mb-3">
+                      Takk for din henvendelse!
+                    </h3>
+                    <p className="text-[#F5F0E8]/60 max-w-md mb-8 leading-relaxed">
+                      Vi har mottatt meldingen din og vil ta kontakt med deg så snart som mulig — vanligvis innen én virkedag.
+                    </p>
+                    <button
+                      onClick={() => setFormSent(false)}
+                      className="text-[#C4885C] hover:text-[#A86840] transition-colors text-sm font-medium flex items-center gap-2"
+                    >
+                      <Send size={14} />
+                      Send en ny henvendelse
+                    </button>
+                  </div>
+                ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* Segment dropdown */}
                   <div>
@@ -802,12 +821,8 @@ export default function StraumeLanding() {
                     <Send size={18} />
                     Send henvendelse
                   </button>
-                  {formSent && (
-                    <p className="text-[#C4885C] text-sm mt-2">
-                      Takk for din henvendelse! Vi tar kontakt snart.
-                    </p>
-                  )}
                 </form>
+                )}
               </AnimatedSection>
 
               {/* Contact info */}
