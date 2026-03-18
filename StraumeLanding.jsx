@@ -26,7 +26,6 @@ import {
   Zap,
   Headphones,
   ThermometerSun,
-  FileCheck,
   BadgeCheck,
   CheckCircle,
   Shovel,
@@ -188,14 +187,6 @@ const tjenester = [
     segments: ['privat'],
     text: {
       privat: 'Tegn en serviceavtale fra kr 199,- per måned og bli prioritert kunde hos oss. Kontakt oss for å høre hva som ligger i pakken.',
-    },
-  },
-  {
-    icon: FileCheck,
-    title: 'Boligmappa-dokumentasjon',
-    segments: ['privat'],
-    text: {
-      privat: 'Alt arbeid vi utfører dokumenteres i din Boligmappa. Vi hjelper deg også med å komme i gang med og bruke Boligmappa.',
     },
   },
 ];
@@ -383,7 +374,7 @@ export default function StraumeLanding() {
 
                 <AnimatedSection delay={0.1}>
                   <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-stone-900 leading-tight">
-                    Pålitelig drift og vedlikehold for{' '}
+                    Sømløs drift og vedlikehold for {' '}
                     <span className="text-[#864A28]">næringsbygg</span>
                   </h1>
                 </AnimatedSection>
@@ -391,7 +382,8 @@ export default function StraumeLanding() {
                 <AnimatedSection delay={0.2}>
                   <p className="mt-6 text-lg md:text-xl text-stone-500 max-w-xl leading-relaxed">
                     Vi sørger for at bygget ditt fungerer som det skal – hver dag.
-                    Fleksible løsninger tilpasset ditt behov.
+                    Fleksible løsninger tilpasset ditt behov. 
+                    For næringsbygg, borettslag og private boliger.
                   </p>
                 </AnimatedSection>
 
@@ -548,6 +540,19 @@ export default function StraumeLanding() {
                 </div>
               ))}
             </div>
+
+            {activeSegment === 'privat' && (
+              <div className="mt-10 flex items-start gap-4 bg-white/60 border border-stone-200 rounded-xl px-6 py-5 max-w-2xl mx-auto">
+                <div className="w-10 h-10 rounded-lg bg-[#1C1917]/5 flex items-center justify-center shrink-0 mt-0.5">
+                  <BadgeCheck size={20} className="text-[#864A28]" />
+                </div>
+                <div>
+                  <p className="text-stone-700 text-sm leading-relaxed">
+                    <span className="font-semibold text-stone-900">Boligmappa-dokumentasjon:</span> Alt arbeid vi utfører dokumenteres i din Boligmappa. Vi hjelper deg også med å komme i gang med og bruke Boligmappa.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           <style>{`
