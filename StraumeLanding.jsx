@@ -29,6 +29,7 @@ import {
   FileCheck,
   BadgeCheck,
   CheckCircle,
+  Shovel,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -134,6 +135,16 @@ const tjenester = [
     text: {
       naering: 'Vedlikehold av grøntanlegg, parkering, gangveier og tilhørende utearealer.',
       borettslag: 'Stell av fellesområder ute — plen, hekk, parkering og lekeplass.',
+    },
+  },
+  {
+    icon: Shovel,
+    title: 'Entreprenørarbeid',
+    segments: ['naering', 'borettslag', 'privat'],
+    text: {
+      naering: 'Dreneringsjobber, natursteinsmuring og mindre gravejobber for næringseiendommer.',
+      borettslag: 'Drenering, natursteinsmuring og mindre gravearbeid for borettslag og sameier.',
+      privat: 'Vi utfører dreneringsjobber, natursteinsmuring og mindre gravejobber for private boliger.',
     },
   },
   {
@@ -296,7 +307,7 @@ export default function StraumeLanding() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <button onClick={() => scrollTo('hero')}>
-              <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-8" />
+              <img src="https://ucarecdn.com/43daf337-8396-4e5b-b99d-5ebf051b48de/drift_logo_lys_1.png" alt="Straume Drift & Vedlikehold" className="h-8" />
             </button>
 
             {/* Desktop nav */}
@@ -891,7 +902,7 @@ export default function StraumeLanding() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
               <div className="flex items-center gap-6">
-                <img src="https://ucarecdn.com/1a365f74-1c48-4860-b97f-bd338062dd37/logo_lys.svg" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
+                <img src="https://ucarecdn.com/43daf337-8396-4e5b-b99d-5ebf051b48de/drift_logo_lys_1.png" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
                 <div className="w-px h-6 bg-[#F5F0E8]/10" />
                 <a href="https://www.straumegruppen.no" target="_blank" rel="noopener noreferrer">
                   <img src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png" alt="Straumegruppen" className="h-6 opacity-50 hover:opacity-80 transition-opacity" />
