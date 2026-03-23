@@ -28,7 +28,10 @@ import {
   ThermometerSun,
   BadgeCheck,
   CheckCircle,
+  HardHat,
+  BrickWall,
   Shovel,
+  Pickaxe,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
@@ -95,6 +98,13 @@ const segmenter = [
     icon: User,
     desc: 'Praktisk hjelp, småjobber og vedlikehold for bolig',
     formLabel: 'Privat',
+  },
+  {
+    id: 'entreprenor',
+    label: 'Entreprenørarbeid',
+    icon: HardHat,
+    desc: 'Drenering, natursteinsmuring og mindre gravejobber',
+    formLabel: 'Entreprenørarbeid',
   },
 ];
 
@@ -189,6 +199,30 @@ const tjenester = [
       privat: 'Tegn en serviceavtale fra kr 199,- per måned og bli prioritert kunde hos oss. Kontakt oss for å høre hva som ligger i pakken.',
     },
   },
+  {
+    icon: BrickWall,
+    title: 'Natursteinsmuring',
+    segments: ['entreprenor'],
+    text: {
+      entreprenor: 'Muring av naturstein til støttemurer, fasader og hageanlegg. Solid håndverk med varige materialer.',
+    },
+  },
+  {
+    icon: Shovel,
+    title: 'Drenering',
+    segments: ['entreprenor'],
+    text: {
+      entreprenor: 'Drenering rundt bolig og bygg. Vi sørger for riktig fall, membran og tilkobling til avløp.',
+    },
+  },
+  {
+    icon: Pickaxe,
+    title: 'Mindre gravejobber',
+    segments: ['entreprenor'],
+    text: {
+      entreprenor: 'Graving for kabler, rør, fundament og diverse grunnarbeid. Ryddig og effektiv utførelse.',
+    },
+  },
 ];
 
 // ── USPs ──
@@ -258,10 +292,10 @@ export default function StraumeLanding() {
     setTimeout(() => scrollTo('tjenester'), 100);
   };
 
-  // Filter services based on active segment
+  // Filter services based on active segment (only show when a segment is selected)
   const filteredTjenester = activeSegment
     ? tjenester.filter(t => t.segments.includes(activeSegment))
-    : tjenester;
+    : [];
 
   // Get the right description text for a service
   const getServiceText = (service) => {
@@ -443,7 +477,7 @@ export default function StraumeLanding() {
               </p>
             </AnimatedSection>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto">
               {segmenter.map((seg, i) => {
                 const isActive = activeSegment === seg.id;
                 return (
@@ -482,19 +516,6 @@ export default function StraumeLanding() {
               })}
             </div>
 
-            {activeSegment && (
-              <div className="text-center mt-6">
-                <button
-                  onClick={() => {
-                    setActiveSegment(null);
-                    setFormData(prev => ({ ...prev, segment: '' }));
-                  }}
-                  className="text-stone-400 hover:text-[#864A28] text-sm transition-colors"
-                >
-                  Vis alle tjenester
-                </button>
-              </div>
-            )}
           </div>
         </section>
 
@@ -511,11 +532,12 @@ export default function StraumeLanding() {
               <p className="text-stone-500 text-center max-w-2xl mx-auto mb-16">
                 {activeSegment
                   ? `Tjenester tilpasset ${segmenter.find(s => s.id === activeSegment)?.label.toLowerCase()}.`
-                  : 'Fra daglig drift til akutt bistand – vi dekker alle behov knyttet til vedlikehold og drift.'
+                  : 'Velg ditt segment over for å se tjenestene vi tilbyr.'
                 }
               </p>
             </AnimatedSection>
 
+            {filteredTjenester.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredTjenester.map((t, i) => (
                 <div
@@ -540,6 +562,11 @@ export default function StraumeLanding() {
                 </div>
               ))}
             </div>
+            ) : (
+              <div className="text-center py-12 px-6 rounded-2xl border border-dashed border-stone-300 bg-white/40">
+                <p className="text-stone-400 text-lg">Velg et segment over for å se relevante tjenester.</p>
+              </div>
+            )}
 
             {activeSegment === 'privat' && (
               <div className="mt-10 flex items-start gap-4 bg-white/60 border border-stone-200 rounded-xl px-6 py-5 max-w-2xl mx-auto">
@@ -780,6 +807,7 @@ export default function StraumeLanding() {
                         <option value="Næringsbygg" className="bg-[#1C1917]">Næringsbygg</option>
                         <option value="Borettslag / sameie" className="bg-[#1C1917]">Borettslag / sameie</option>
                         <option value="Privat" className="bg-[#1C1917]">Privat</option>
+                        <option value="Entreprenørarbeid" className="bg-[#1C1917]">Entreprenørarbeid</option>
                       </select>
                       <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F5F0E8]/30 pointer-events-none" />
                     </div>
