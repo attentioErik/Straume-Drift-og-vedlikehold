@@ -477,7 +477,7 @@ export default function StraumeLanding() {
               </p>
             </AnimatedSection>
 
-            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto">
               {segmenter.map((seg, i) => {
                 const isActive = activeSegment === seg.id;
                 return (
