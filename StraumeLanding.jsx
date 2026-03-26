@@ -32,10 +32,11 @@ import {
   BrickWall,
   Shovel,
   Pickaxe,
+  Play,
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
-   Straume Drift & Vedlikehold – Landing Page
+   Helgheim Drift – Landing Page
    ─────────────────────────────────────────── */
 
 // ── Intersection Observer hook for scroll animations ──
@@ -260,6 +261,7 @@ export default function StraumeLanding() {
   const [activeSegment, setActiveSegment] = useState(null);
   const [formData, setFormData] = useState({ segment: '', navn: '', epost: '', telefon: '', melding: '' });
   const [formSent, setFormSent] = useState(false);
+  const [fullscreenVideo, setFullscreenVideo] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -332,7 +334,7 @@ export default function StraumeLanding() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <button onClick={() => scrollTo('hero')}>
-              <img src="https://ucarecdn.com/43daf337-8396-4e5b-b99d-5ebf051b48de/drift_logo_lys_1.png" alt="Straume Drift & Vedlikehold" className="h-8" />
+              <img src="https://ucarecdn.com/cc2e794e-914d-44de-ba65-9518682d0901/logo_white_transperant300x.png" alt="Helgheim Drift" className="h-8" />
             </button>
 
             {/* Desktop nav */}
@@ -444,8 +446,8 @@ export default function StraumeLanding() {
                 <div className="relative">
                   <div className="rounded-2xl overflow-hidden shadow-2xl shadow-stone-400/20 border border-stone-200">
                     <img
-                      src="https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png"
-                      alt="Straume Drift & Vedlikehold – profesjonelt vedlikehold av næringsbygg"
+                      src="https://ucarecdn.com/a104f5b9-c737-441a-81c3-5dfed6d410ed/Skjermbilde20260326kl150921.png"
+                      alt="Helgheim Drift – profesjonelt vedlikehold av næringsbygg"
                       className="w-full h-[400px] md:h-[500px] object-cover"
                     />
                   </div>
@@ -590,6 +592,65 @@ export default function StraumeLanding() {
           `}</style>
         </section>
 
+        {/* ════════════════ VIDEO ════════════════ */}
+        <section className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-[#864A28]/5 rounded-full blur-3xl" />
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <AnimatedSection>
+              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3 text-center">
+                Se oss i arbeid
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-4">
+                Hvorfor velge Helgheim Drift?
+              </h2>
+              <p className="text-[#F5F0E8]/60 text-center max-w-xl mx-auto mb-12">
+                Helgheim Drift har over 30 års erfaring innen drift og vedlikehold.
+              </p>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.1}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                {[
+                  { bg: 'https://player.vimeo.com/video/1177337076?background=1', full: 'https://player.vimeo.com/video/1177337076?autoplay=1&title=0&byline=0&portrait=0', title: 'Helgheim Drift Reel' },
+                  { bg: 'https://player.vimeo.com/video/1177340468?background=1', full: 'https://player.vimeo.com/video/1177340468?autoplay=1&title=0&byline=0&portrait=0', title: 'Helgheim Drift Reel 2' },
+                ].map((video, i) => (
+                  <div
+                    key={i}
+                    className="relative rounded-2xl overflow-hidden shadow-xl border border-[#F5F0E8]/10 group cursor-pointer"
+                    onClick={() => setFullscreenVideo(video.full)}
+                  >
+                    <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
+                      <iframe
+                        src={video.bg}
+                        frameBorder="0"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
+                        title={video.title}
+                      />
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="w-16 h-16 rounded-full bg-[#1C1917]/50 backdrop-blur-sm border border-[#F5F0E8]/20 flex items-center justify-center group-hover:bg-[#1C1917]/70 group-hover:scale-110 transition-all duration-300">
+                        <Play size={28} className="text-[#F5F0E8] ml-1" fill="#F5F0E8" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-center mt-10">
+                <button
+                  onClick={() => document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20 inline-flex items-center gap-2"
+                >
+                  <Send size={18} />
+                  Ta kontakt
+                </button>
+              </div>
+            </AnimatedSection>
+          </div>
+        </section>
+
         {/* ════════════════ OM OSS ════════════════ */}
         <section id="om" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
           <div className="absolute top-0 right-0 w-72 h-72 bg-[#864A28]/5 rounded-full blur-3xl" />
@@ -605,7 +666,7 @@ export default function StraumeLanding() {
                 </h2>
                 <div className="space-y-4 text-[#F5F0E8]/70 leading-relaxed">
                   <p>
-                    Straume Drift & Vedlikehold drives av Atle, som har lang erfaring innen
+                    Helgheim Drift drives av Atle, som har lang erfaring innen
                     automasjon, tekniske anlegg og praktisk vedlikehold. Med bakgrunn fra drift
                     av basseng, tekniske styringssystemer og bygningsvedlikehold, tilbyr vi en
                     bred og pålitelig tjeneste — enten du er næringsaktør, borettslag eller
@@ -613,22 +674,6 @@ export default function StraumeLanding() {
                   </p>
                 </div>
 
-                {/* Straumegruppen */}
-                <div className="mt-8 bg-[#292524]/40 rounded-2xl p-6 border border-[#F5F0E8]/5 flex items-center gap-5">
-                  <a href="https://www.straumegruppen.no" target="_blank" rel="noopener noreferrer" className="shrink-0">
-                    <img
-                      src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png"
-                      alt="Straumegruppen"
-                      className="h-12"
-                    />
-                  </a>
-                  <div>
-                    <p className="text-[#C4885C] font-medium text-sm mb-1">Del av Straumegruppen</p>
-                    <p className="text-[#F5F0E8]/60 text-sm leading-relaxed">
-                      I Straumegruppen har vi alle faggruppene du trenger.
-                    </p>
-                  </div>
-                </div>
               </AnimatedSection>
 
               <AnimatedSection delay={0.2}>
@@ -883,11 +928,11 @@ export default function StraumeLanding() {
                         +47 46 40 59 65
                       </a>
                       <a
-                        href="mailto:atle@straumedrift.no"
+                        href="mailto:atle@helgheimdrift.no"
                         className="flex items-center gap-3 text-[#F5F0E8]/70 hover:text-[#C4885C] transition-colors"
                       >
                         <Mail size={18} className="text-[#C4885C]" />
-                        atle@straumedrift.no
+                        atle@helgheimdrift.no
                       </a>
                       <div className="flex items-center gap-3 text-[#F5F0E8]/70">
                         <MapPin size={18} className="text-[#C4885C]" />
@@ -934,15 +979,9 @@ export default function StraumeLanding() {
         <footer className="bg-[#171412] border-t border-[#F5F0E8]/5 py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-6">
-                <img src="https://ucarecdn.com/43daf337-8396-4e5b-b99d-5ebf051b48de/drift_logo_lys_1.png" alt="Straume Drift & Vedlikehold" className="h-7 opacity-80" />
-                <div className="w-px h-6 bg-[#F5F0E8]/10" />
-                <a href="https://www.straumegruppen.no" target="_blank" rel="noopener noreferrer">
-                  <img src="https://ucarecdn.com/f76d84fe-7284-4296-8105-e824ee296e9d/Straume_Gruppen_AS_Mrk.png" alt="Straumegruppen" className="h-6 opacity-50 hover:opacity-80 transition-opacity" />
-                </a>
-              </div>
+              <img src="https://ucarecdn.com/cc2e794e-914d-44de-ba65-9518682d0901/logo_white_transperant300x.png" alt="Helgheim Drift" className="h-7 opacity-80" />
               <p className="text-[#F5F0E8]/30 text-sm">
-                &copy; {new Date().getFullYear()} Straume Drift & Vedlikehold. Alle rettigheter reservert.
+                &copy; {new Date().getFullYear()} Helgheim Drift. Alle rettigheter reservert.
               </p>
               <div className="flex gap-4">
                 <a
@@ -976,6 +1015,36 @@ export default function StraumeLanding() {
           </div>
         </footer>
       </div>
+
+      {/* Fullscreen video modal */}
+      {fullscreenVideo && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setFullscreenVideo(null)}
+        >
+          <button
+            onClick={() => setFullscreenVideo(null)}
+            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          >
+            <X size={20} />
+          </button>
+          <div
+            className="w-full max-w-md rounded-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
+              <iframe
+                src={fullscreenVideo}
+                frameBorder="0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                title="Helgheim Drift Video"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
