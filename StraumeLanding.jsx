@@ -36,7 +36,7 @@ import {
 } from 'lucide-react';
 
 /* ───────────────────────────────────────────
-   Helgheim Drift – Landing Page
+   Totalbyggdrift – Landing Page
    ─────────────────────────────────────────── */
 
 // ── Intersection Observer hook for scroll animations ──
@@ -228,7 +228,7 @@ const tjenester = [
 
 // ── USPs ──
 const usper = [
-  { icon: Users, title: 'Én kontaktperson', desc: 'Du slipper å forholde deg til mange leverandører. Atle har oversikten.' },
+  { icon: Users, title: 'Én kontaktperson', desc: 'Du slipper å forholde deg til mange leverandører. Vi har full oversikt.' },
   { icon: Shield, title: 'Fleksible avtaler', desc: 'Tilpasset ditt behov — fra faste driftsavtaler til hjelp ved behov.' },
   { icon: Zap, title: 'Rask respons', desc: 'Kort vei fra telefon til handling. Vi stiller opp når det haster.' },
   { icon: Cog, title: 'Teknisk kompetanse', desc: 'Solid erfaring med automasjon, tekniske anlegg og regelverk.' },
@@ -334,7 +334,7 @@ export default function StraumeLanding() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
             <button onClick={() => scrollTo('hero')}>
-              <img src="https://ucarecdn.com/cc2e794e-914d-44de-ba65-9518682d0901/logo_white_transperant300x.png" alt="Helgheim Drift" className="h-8" />
+              <img src="https://ucarecdn.com/73413fc5-89f7-40af-b5ad-602c75a7d606/logo_white_transperant300x.png" alt="Totalbyggdrift" className="h-8" />
             </button>
 
             {/* Desktop nav */}
@@ -447,7 +447,7 @@ export default function StraumeLanding() {
                   <div className="rounded-2xl overflow-hidden shadow-2xl shadow-stone-400/20 border border-stone-200">
                     <img
                       src="https://ucarecdn.com/a104f5b9-c737-441a-81c3-5dfed6d410ed/Skjermbilde20260326kl150921.png"
-                      alt="Helgheim Drift – profesjonelt vedlikehold av næringsbygg"
+                      alt="Totalbyggdrift – profesjonelt vedlikehold av næringsbygg"
                       className="w-full h-[400px] md:h-[500px] object-cover"
                     />
                   </div>
@@ -601,18 +601,18 @@ export default function StraumeLanding() {
                 Se oss i arbeid
               </p>
               <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-4">
-                Hvorfor velge Helgheim Drift?
+                Hvorfor velge Totalbyggdrift?
               </h2>
               <p className="text-[#F5F0E8]/60 text-center max-w-xl mx-auto mb-12">
-                Helgheim Drift har over 30 års erfaring innen drift og vedlikehold.
+                Totalbyggdrift har over 30 års erfaring innen drift og vedlikehold.
               </p>
             </AnimatedSection>
 
             <AnimatedSection delay={0.1}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
                 {[
-                  { bg: 'https://player.vimeo.com/video/1177337076?background=1', full: 'https://player.vimeo.com/video/1177337076?autoplay=1&title=0&byline=0&portrait=0', title: 'Helgheim Drift Reel' },
-                  { bg: 'https://player.vimeo.com/video/1177340468?background=1', full: 'https://player.vimeo.com/video/1177340468?autoplay=1&title=0&byline=0&portrait=0', title: 'Helgheim Drift Reel 2' },
+                  { bg: 'https://player.vimeo.com/video/1177337076?background=1', full: 'https://player.vimeo.com/video/1177337076?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel' },
+                  { bg: 'https://player.vimeo.com/video/1177340468?background=1', full: 'https://player.vimeo.com/video/1177340468?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel 2' },
                 ].map((video, i) => (
                   <div
                     key={i}
@@ -666,11 +666,10 @@ export default function StraumeLanding() {
                 </h2>
                 <div className="space-y-4 text-[#F5F0E8]/70 leading-relaxed">
                   <p>
-                    Helgheim Drift drives av Atle, som har lang erfaring innen
-                    automasjon, tekniske anlegg og praktisk vedlikehold. Med bakgrunn fra drift
-                    av basseng, tekniske styringssystemer og bygningsvedlikehold, tilbyr vi en
-                    bred og pålitelig tjeneste — enten du er næringsaktør, borettslag eller
-                    privatperson.
+                    Vi har lang erfaring innen automasjon, tekniske anlegg og praktisk
+                    vedlikehold. Med bakgrunn fra drift av basseng, tekniske styringssystemer
+                    og bygningsvedlikehold, tilbyr vi en bred og pålitelig tjeneste — enten du
+                    er næringsaktør, borettslag eller privatperson.
                   </p>
                 </div>
 
@@ -928,11 +927,11 @@ export default function StraumeLanding() {
                         +47 46 40 59 65
                       </a>
                       <a
-                        href="mailto:atle@helgheimdrift.no"
+                        href="mailto:post@totalbyggdrift.no"
                         className="flex items-center gap-3 text-[#F5F0E8]/70 hover:text-[#C4885C] transition-colors"
                       >
                         <Mail size={18} className="text-[#C4885C]" />
-                        atle@helgheimdrift.no
+                        post@totalbyggdrift.no
                       </a>
                       <div className="flex items-center gap-3 text-[#F5F0E8]/70">
                         <MapPin size={18} className="text-[#C4885C]" />
@@ -979,9 +978,9 @@ export default function StraumeLanding() {
         <footer className="bg-[#171412] border-t border-[#F5F0E8]/5 py-10">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <img src="https://ucarecdn.com/cc2e794e-914d-44de-ba65-9518682d0901/logo_white_transperant300x.png" alt="Helgheim Drift" className="h-7 opacity-80" />
+              <img src="https://ucarecdn.com/73413fc5-89f7-40af-b5ad-602c75a7d606/logo_white_transperant300x.png" alt="Totalbyggdrift" className="h-7 opacity-80" />
               <p className="text-[#F5F0E8]/30 text-sm">
-                &copy; {new Date().getFullYear()} Helgheim Drift. Alle rettigheter reservert.
+                &copy; {new Date().getFullYear()} Totalbyggdrift. Alle rettigheter reservert.
               </p>
               <div className="flex gap-4">
                 <a
@@ -1039,7 +1038,7 @@ export default function StraumeLanding() {
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                title="Helgheim Drift Video"
+                title="Totalbyggdrift Video"
               />
             </div>
           </div>
