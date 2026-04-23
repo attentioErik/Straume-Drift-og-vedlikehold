@@ -170,7 +170,7 @@ export default function HomePage() {
                 </AnimatedSection>
                 <AnimatedSection delay={0.1}>
                   <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-stone-900 leading-tight">
-                    Sømløs drift og vedlikehold for <span className="text-[#864A28]">næringsbygg</span>
+                    Sømløs drift og vedlikehold av <span className="text-[#864A28]">bygg og eiendom</span>
                   </h1>
                 </AnimatedSection>
                 <AnimatedSection delay={0.2}>
