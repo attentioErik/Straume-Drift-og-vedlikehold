@@ -1,525 +1,343 @@
-import { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
-  Wrench,
-  Building2,
-  Home,
-  User,
-  Cog,
-  TreePine,
-  Phone,
-  Shield,
-  ChevronDown,
-  Send,
-  Quote,
-  Hammer,
-  Waves,
-  Paintbrush,
-  Users,
-  Zap,
-  BadgeCheck,
-  HardHat,
-  BrickWall,
-  Shovel,
-  Pickaxe,
-  Play,
-  X,
+  ArrowRight, Check, Phone, Star, Play, X, BadgeCheck, Building2, Quote,
 } from 'lucide-react';
-import AnimatedSection from '../components/AnimatedSection';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ContactForm from '../components/ContactForm';
-import ContactInfo from '../components/ContactInfo';
+import AnimatedSection from '../components/AnimatedSection';
+import SectionHeading from '../components/ui/SectionHeading';
+import Button from '../components/ui/Button';
+import PriceCard from '../components/ui/PriceCard';
+import InnkjopsgruppenSection from '../components/InnkjopsgruppenSection';
 import Seo from '../components/Seo';
+import { ucare } from '../utils/img';
+import { ventilasjonServices, driftServices, getService } from '../data/services';
+import { stats, steps, testimonials, videos } from '../data/content';
 
-const segmenter = [
-  { id: 'naering', label: 'Næringsbygg', icon: Building2, desc: 'Driftsavtaler og teknisk vedlikehold for næringseiendommer', formLabel: 'Næringsbygg' },
-  { id: 'borettslag', label: 'Borettslag & sameie', icon: Home, desc: 'Fast vaktmester og forutsigbar oppfølging for fellesarealer', formLabel: 'Borettslag / sameie' },
-  { id: 'privat', label: 'Privat', icon: User, desc: 'Praktisk hjelp, småjobber og vedlikehold for bolig', formLabel: 'Privat' },
-  { id: 'entreprenor', label: 'Entreprenørarbeid', icon: HardHat, desc: 'Drenering, natursteinsmuring og mindre gravejobber', formLabel: 'Entreprenørarbeid' },
-];
+const HERO_IMG = 'https://ucarecdn.com/7be3c1eb-183b-4e98-b38a-c6a229ad1a62/';
 
-const tjenester = [
-  { icon: Wrench, title: 'Deltids vaktmestertjenester', segments: ['naering', 'borettslag'], text: {
-    naering: 'Fleksibel vaktmesterordning tilpasset eiendommens behov. Fast kontaktperson med full oversikt.',
-    borettslag: 'Fast vaktmester for borettslaget. Forutsigbar avtale styret kan stole på.',
-  }},
-  { icon: Hammer, title: 'Vedlikehold av bygg og fellesarealer', segments: ['naering', 'borettslag'], text: {
-    naering: 'Systematisk oppfølging og vedlikehold av næringsbygg, fasade og fellesareal.',
-    borettslag: 'Vedlikehold av fellesarealer, trappeoppganger, fasade og tekniske rom.',
-  }},
-  { icon: Cog, title: 'Drift av tekniske anlegg', segments: ['naering', 'borettslag'], text: {
-    naering: 'Oppfølging av ventilasjon, varme, kjøling og tekniske installasjoner. Dokumentert og systematisk.',
-    borettslag: 'Oppfølging av heis, ventilasjon, varmeanlegg og andre tekniske systemer i bygget.',
-  }},
-  { icon: TreePine, title: 'Uteanlegg og uteområder', segments: ['naering', 'borettslag'], text: {
-    naering: 'Vedlikehold av grøntanlegg, parkering, gangveier og tilhørende utearealer.',
-    borettslag: 'Stell av fellesområder ute — plen, hekk, parkering og lekeplass.',
-  }},
-  { icon: Shovel, title: 'Entreprenørarbeid', segments: ['naering', 'borettslag', 'privat'], text: {
-    naering: 'Dreneringsjobber, natursteinsmuring og mindre gravejobber for næringseiendommer.',
-    borettslag: 'Drenering, natursteinsmuring og mindre gravearbeid for borettslag og sameier.',
-    privat: 'Vi utfører dreneringsjobber, natursteinsmuring og mindre gravejobber for private boliger.',
-  }},
-  { icon: Phone, title: 'Ringe-hjelp / praktisk bistand', segments: ['naering', 'borettslag', 'privat'], text: {
-    naering: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
-    borettslag: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
-    privat: 'Rask hjelp ved akutte eller løpende behov. Ring, så stiller vi opp.',
-  }},
-  { icon: Waves, title: 'Basseng og våtrom', segments: ['naering', 'privat'], text: {
-    naering: 'Drift og vedlikehold av svømmebasseng og badeanlegg. Kompetanse på vannbehandling og regelverk.',
-    privat: 'Service og vedlikehold av privat basseng. Vannkvalitet, filtrering og teknisk oppfølging.',
-  }},
-  { icon: Paintbrush, title: 'Småjobber og vedlikehold', segments: ['privat'], text: {
-    privat: 'Alt fra montering og reparasjoner til generelt vedlikehold av bolig og hage.',
-  }},
-  { icon: BadgeCheck, title: 'Serviceavtale – Prioritert kunde', segments: ['privat'], text: {
-    privat: 'Tegn en serviceavtale fra kr 199,- per måned og bli prioritert kunde hos oss. Kontakt oss for å høre hva som ligger i pakken.',
-  }},
-  { icon: BrickWall, title: 'Natursteinsmuring', segments: ['entreprenor'], text: {
-    entreprenor: 'Muring av naturstein til støttemurer, fasader og hageanlegg. Solid håndverk med varige materialer.',
-  }},
-  { icon: Shovel, title: 'Drenering', segments: ['entreprenor'], text: {
-    entreprenor: 'Drenering rundt bolig og bygg. Vi sørger for riktig fall, membran og tilkobling til avløp.',
-  }},
-  { icon: Pickaxe, title: 'Mindre gravejobber', segments: ['entreprenor'], text: {
-    entreprenor: 'Graving for kabler, rør, fundament og diverse grunnarbeid. Ryddig og effektiv utførelse.',
-  }},
-];
-
-const usper = [
-  { icon: Users, title: 'Én kontaktperson', desc: 'Du slipper å forholde deg til mange leverandører. Vi har full oversikt.' },
-  { icon: Shield, title: 'Fleksible avtaler', desc: 'Tilpasset ditt behov — fra faste driftsavtaler til hjelp ved behov.' },
-  { icon: Zap, title: 'Rask respons', desc: 'Kort vei fra telefon til handling. Vi stiller opp når det haster.' },
-  { icon: Cog, title: 'Teknisk kompetanse', desc: 'Solid erfaring med automasjon, tekniske anlegg og regelverk.' },
-];
-
-const testimonials = [
-  {
-    name: 'Silvia Høines',
-    role: 'Hotellsjef, Panorama Hotel & Resort',
-    text: 'Atle har jobbet som vaktmester hos oss på Panorama Hotell & Resort. Jeg setter pris på hans fleksibilitet og vilje til å stille opp når behovet melder seg. Han er dyktig til å sette seg inn i nye systemer, og samarbeidet med ham er alltid enkelt og problemfritt.',
-    img: 'https://ucarecdn.com/b2239218-b395-49a5-a7f1-de5286a066f4/ce674af1c8a52d5851ac72b98d73db4333fada114000x6000.avif',
-  },
-];
-
-const galleryItems = [
-  { id: 1, label: 'Vedlikehold og drift', span: 'md:col-span-2 md:row-span-2', img: 'https://ucarecdn.com/1f87a414-8ddb-41e2-87dc-5a8b69ee5e1b/IMG_6776.JPG' },
-  { id: 2, label: 'Næringsbygg og fasade', span: '', img: 'https://ucarecdn.com/a70f5a7c-6ffd-443b-80c3-c69f0271834d/hf_20260313_115618_24d34741cb7a4cfebf38d0c678dc2371.png' },
-  { id: 3, label: 'Uteområder og grøntanlegg', span: '', img: 'https://ucarecdn.com/150dd219-0350-42fd-b278-b4a8f6c24d26/488624009_17860444113391535_1420075698923640434_n.jpg' },
-  { id: 4, label: 'Teknisk vedlikehold', span: 'md:col-span-2', img: 'https://ucarecdn.com/746bb917-c71f-4f95-a68a-c6ec77cecad2/DSC00529Edit.jpg' },
-  { id: 5, label: 'Bassengdrift og vedlikehold', span: '', img: 'https://ucarecdn.com/2d77d7d9-a4c3-4cd7-b2a2-3d6bbea45f79/485084386_17857408695391535_2129108615804766927_n.jpg' },
-  { id: 6, label: 'Fellesarealer og oppfølging', span: '', img: 'https://ucarecdn.com/5f01fecf-8f6a-46cb-9e8e-ef4d9f8ad15f/491495651_17861233797391535_5667774428046579171_n.jpg' },
-  { id: 7, label: 'SD-anlegg', span: 'md:col-span-2', img: 'https://ucarecdn.com/9b426c7e-a2fa-4af6-9998-0053bfc01444/20260314153923.jpg' },
-  { id: 8, label: 'Energioppfølging', span: '', img: 'https://ucarecdn.com/d4942751-ab2e-4f3e-b00b-ddcd99e86891/20260314153932.jpg' },
-  { id: 9, label: 'Energioppfølging og styring', span: '', img: 'https://ucarecdn.com/fefbeec0-e8f9-4480-a535-10ce99778478/20260314153909.jpg' },
-];
+const priceServices = ['avtrekksventilasjon', 'balansert-ventilasjon'].map(getService);
+const aggregat = getService('ventilasjonsaggregat');
 
 export default function HomePage() {
-  const [activeSegment, setActiveSegment] = useState(null);
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
-  const [segmentDefault, setSegmentDefault] = useState('');
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // Scroll to hash on mount (e.g. when navigating from other pages)
-  useEffect(() => {
-    if (location.hash) {
-      const id = location.hash.slice(1);
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    }
-  }, [location.hash]);
-
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleSegmentClick = (segmentId) => {
-    setActiveSegment(segmentId);
-    const seg = segmenter.find(s => s.id === segmentId);
-    if (seg) setSegmentDefault(seg.formLabel);
-    setTimeout(() => scrollTo('tjenester'), 100);
-  };
-
-  const filteredTjenester = activeSegment
-    ? tjenester.filter(t => t.segments.includes(activeSegment))
-    : [];
-
-  const getServiceText = (service) => {
-    if (activeSegment && service.text[activeSegment]) return service.text[activeSegment];
-    return service.text.naering || Object.values(service.text)[0];
-  };
 
   return (
     <>
-      <Seo />
-      <div className="font-body text-stone-800 bg-[#F5F0E8] min-h-screen">
+      <Seo
+        title="Kanalrens og service på ventilasjon"
+        description="Friskere inneluft starter med ren ventilasjon. Profesjonell kanalrens og service på avtrekks- og balansert ventilasjon for boliger, borettslag og næringsbygg."
+        image={HERO_IMG}
+      />
+      <div className="font-body text-ink bg-white min-h-screen">
         <Navbar />
 
         {/* HERO */}
-        <section id="hero" className="bg-[#F5F0E8] bg-noise relative min-h-screen flex items-center pt-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 w-full">
-            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-              <div>
-                <AnimatedSection>
-                  <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-4">
-                    Drift & Vedlikehold
-                  </p>
-                </AnimatedSection>
-                <AnimatedSection delay={0.1}>
-                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-stone-900 leading-tight">
-                    Sømløs drift og vedlikehold av <span className="text-[#864A28]">bygg og eiendom</span>
-                  </h1>
-                </AnimatedSection>
-                <AnimatedSection delay={0.2}>
-                  <p className="mt-6 text-lg md:text-xl text-stone-500 max-w-xl leading-relaxed">
-                    Vi sørger for at bygget ditt fungerer som det skal – hver dag.
-                    Fleksible løsninger tilpasset ditt behov. For næringsbygg, borettslag og private boliger.
-                  </p>
-                </AnimatedSection>
-                <AnimatedSection delay={0.3}>
-                  <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                    <Link
-                      to="/kontakt"
-                      className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20 text-center"
-                    >
-                      Få et uforpliktende tilbud
-                    </Link>
-                    <button
-                      onClick={() => scrollTo('tjenester')}
-                      className="border border-stone-300 text-stone-700 font-medium px-8 py-4 rounded-lg text-lg hover:bg-stone-100 transition-colors"
-                    >
-                      Se våre tjenester
-                    </button>
-                  </div>
-                </AnimatedSection>
-              </div>
+        <section className="relative min-h-[88dvh] flex items-center pt-16 overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src={ucare(HERO_IMG, { w: 1920 })}
+              alt="Frisk inneluft i et hjem med god ventilasjon"
+              className="w-full h-full object-cover object-right"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/75 to-white/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-transparent" />
+          </div>
 
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-20">
+            <div className="max-w-xl">
+              <AnimatedSection>
+                <span className="inline-flex items-center gap-2 bg-brand-tint text-brand text-xs font-semibold tracking-[0.12em] uppercase px-4 py-2 rounded-full">
+                  Kanalrens & service ventilasjon
+                </span>
+              </AnimatedSection>
+              <AnimatedSection delay={0.1}>
+                <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ink leading-[1.05] mt-6">
+                  Friskere inneluft starter med <span className="text-brand">ren ventilasjon</span>.
+                </h1>
+              </AnimatedSection>
               <AnimatedSection delay={0.2}>
-                <div className="relative">
-                  <div className="rounded-2xl overflow-hidden shadow-2xl shadow-stone-400/20 border border-stone-200">
-                    <img
-                      src="https://ucarecdn.com/a104f5b9-c737-441a-81c3-5dfed6d410ed/Skjermbilde20260326kl150921.png"
-                      alt="Totalbyggdrift – profesjonelt vedlikehold av næringsbygg"
-                      className="w-full h-[400px] md:h-[500px] object-cover"
-                    />
-                  </div>
-                  <div className="absolute -bottom-3 -right-3 w-full h-full rounded-2xl border-2 border-[#864A28]/20 -z-10" />
+                <p className="mt-6 text-lg text-ink-soft max-w-lg leading-relaxed">
+                  Profesjonell kanalrens og service på ventilasjon — for boliger, borettslag og
+                  næringsbygg. Rask respons og sertifiserte fagfolk.
+                </p>
+              </AnimatedSection>
+              <AnimatedSection delay={0.3}>
+                <div className="mt-9 flex flex-col sm:flex-row gap-4">
+                  <Button to="/kontakt" size="lg">Bestill befaring</Button>
+                  <Button to="/tjenester" variant="white" size="lg">Se priser</Button>
+                </div>
+              </AnimatedSection>
+              <AnimatedSection delay={0.4}>
+                <div className="mt-9 flex flex-wrap gap-x-7 gap-y-3 text-sm text-ink-soft">
+                  {['Sertifiserte fagfolk', 'Fast pris', 'Egne avtaler for borettslag'].map((t) => (
+                    <span key={t} className="flex items-center gap-2">
+                      <Check size={16} className="text-brand" /> {t}
+                    </span>
+                  ))}
                 </div>
               </AnimatedSection>
             </div>
-
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-              <ChevronDown className="text-stone-400" size={28} />
-            </div>
           </div>
         </section>
 
-        {/* SEGMENTVELGER */}
-        <section className="py-16 md:py-20 bg-[#F5F0E8] bg-noise">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection>
-              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">Hvem er du?</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-4">Velg ditt segment</h2>
-              <p className="text-stone-500 text-center max-w-2xl mx-auto mb-12">
-                Vi tilpasser tjenestene våre etter hvem du er. Velg nedenfor for å se hva vi kan tilby deg.
-              </p>
-            </AnimatedSection>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto">
-              {segmenter.map((seg, i) => {
-                const isActive = activeSegment === seg.id;
-                return (
-                  <AnimatedSection key={seg.id} delay={i * 0.1} className="h-full">
-                    <button
-                      onClick={() => handleSegmentClick(seg.id)}
-                      className={`w-full h-full text-left rounded-2xl p-6 md:p-8 border-2 transition-all duration-300 group cursor-pointer ${
-                        isActive
-                          ? 'border-[#864A28] bg-[#864A28]/5 shadow-lg shadow-[#864A28]/10'
-                          : 'border-stone-200 bg-white hover:border-[#864A28]/30 hover:shadow-md hover:-translate-y-1'
-                      }`}
-                    >
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-colors duration-300 ${
-                        isActive ? 'accent-gradient' : 'bg-[#1C1917]/5 group-hover:bg-[#1C1917]'
-                      }`}>
-                        <seg.icon size={22} className={`transition-colors duration-300 ${
-                          isActive ? 'text-white' : 'text-[#1C1917] group-hover:text-[#864A28]'
-                        }`} />
-                      </div>
-                      <h3 className={`font-display text-xl mb-2 transition-colors duration-300 ${
-                        isActive ? 'text-[#864A28]' : 'text-stone-900'
-                      }`}>
-                        {seg.label}
-                      </h3>
-                      <p className="text-stone-500 text-sm leading-relaxed">{seg.desc}</p>
-                    </button>
-                  </AnimatedSection>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* TJENESTER */}
-        <section id="tjenester" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise -mt-8">
+        {/* TJENESTER (ventilasjon) */}
+        <section id="tjenester" className="py-20 md:py-28 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection>
-              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">Hva vi tilbyr</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-4">Våre tjenester</h2>
-              <p className="text-stone-500 text-center max-w-2xl mx-auto mb-16">
-                {activeSegment
-                  ? `Tjenester tilpasset ${segmenter.find(s => s.id === activeSegment)?.label.toLowerCase()}.`
-                  : 'Velg ditt segment over for å se tjenestene vi tilbyr.'}
-              </p>
+            <SectionHeading
+              eyebrow="Våre tjenester"
+              title="Alt ventilasjonen din trenger"
+              intro="Fra akutt behov til fast service — vi holder anlegget rent og effektivt, og inneluften frisk hele året."
+            />
+            <div className="mt-12 border-t border-line">
+              {ventilasjonServices.filter((s) => s.slug !== 'kanalrens').map((s, i) => (
+                <AnimatedSection key={s.slug} delay={(i % 4) * 0.05}>
+                  <Link
+                    to={`/tjenester/${s.slug}`}
+                    className="group flex items-center gap-5 border-b border-line border-l-[3px] border-l-brand/60 hover:border-l-brand hover:bg-surface-blue/60 transition-all pl-6 pr-4 py-6"
+                  >
+                    <span className="w-11 h-11 rounded-full bg-brand-tint flex items-center justify-center shrink-0">
+                      <s.icon size={20} className="text-brand" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-display text-xl text-ink">{s.title}</h3>
+                      <p className="text-muted text-sm mt-1 max-w-xl">{s.summary}</p>
+                    </div>
+                    <span className="w-9 h-9 rounded-full border border-line flex items-center justify-center text-ink-soft group-hover:bg-brand group-hover:text-white group-hover:border-brand transition-colors shrink-0">
+                      <ArrowRight size={17} />
+                    </span>
+                  </Link>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* PRISER */}
+        <section id="priser" className="py-20 md:py-28 bg-surface">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading eyebrow="Priser" title="Faste priser på service" center />
+            <AnimatedSection delay={0.1}>
+              <div className="flex justify-center mt-6 mb-12">
+                <span className="inline-flex items-center gap-2 bg-brand-tint text-brand text-sm font-semibold px-4 py-2 rounded-full">
+                  <BadgeCheck size={16} /> Introtilbud: −25 % på all service nå
+                </span>
+              </div>
             </AnimatedSection>
 
-            {filteredTjenester.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredTjenester.map((t, i) => (
-                  <div
-                    key={t.title}
-                    style={{
-                      animation: 'fadeIn 0.3s ease forwards',
-                      animationDelay: `${i * 0.05}s`,
-                      opacity: 0,
-                    }}
-                  >
-                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-stone-100 hover:shadow-md hover:border-[#864A28]/20 transition-all duration-300 h-full group">
-                      <div className="w-12 h-12 rounded-xl bg-[#1C1917]/5 flex items-center justify-center mb-5 group-hover:bg-[#1C1917] transition-colors duration-300">
-                        <t.icon size={22} className="text-[#1C1917] group-hover:text-[#864A28] transition-colors duration-300" />
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto items-stretch">
+              {priceServices.map((s, i) => (
+                <AnimatedSection key={s.slug} delay={i * 0.1}>
+                  <PriceCard service={s} ctaTo={`/tjenester/${s.slug}`} />
+                </AnimatedSection>
+              ))}
+            </div>
+
+            <AnimatedSection delay={0.15}>
+              <div className="mt-8 max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 bg-ink rounded-3xl px-8 py-6 text-white">
+                <p className="text-white/80 text-sm leading-relaxed">
+                  Borettslag og næringsbygg får egne priser og avtaler på kanalrens og ventilasjonsservice.
+                </p>
+                <Button to="/bedrift" variant="white" size="sm" className="shrink-0">
+                  Be om tilbud <ArrowRight size={16} />
+                </Button>
+              </div>
+            </AnimatedSection>
+          </div>
+        </section>
+
+        {/* INNKJØPSGRUPPEN */}
+        <InnkjopsgruppenSection />
+
+        {/* FORDELER / STATS */}
+        <section className="py-20 md:py-28 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading eyebrow="Våre fordeler" title="Et team som holder luften ren" />
+            <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 gap-px bg-line rounded-3xl overflow-hidden border border-line">
+              {stats.map((st, i) => (
+                <AnimatedSection key={st.label} delay={i * 0.08}>
+                  <div className="bg-white p-8 h-full">
+                    <div className="font-display text-5xl md:text-6xl text-brand leading-none tracking-tight">{st.value}</div>
+                    <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-ink-soft">{st.label}</div>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SLIK FUNGERER DET */}
+        <section className="py-20 md:py-28 bg-surface">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading
+              eyebrow="Slik fungerer det"
+              title="Fra henvendelse til ren ventilasjon i 5 steg"
+              intro="Det er enklere enn du tror — fem steg, så er inneluften frisk igjen."
+            />
+            <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+              {steps.map((step, i) => (
+                <AnimatedSection key={step.num} delay={i * 0.07}>
+                  <div className="bg-white rounded-2xl border border-line p-6 h-full">
+                    <div className="font-display text-3xl text-brand/30">{step.num}</div>
+                    <p className="text-brand text-xs font-semibold uppercase tracking-wider mt-3">{step.tag}</p>
+                    <h3 className="font-display text-lg text-ink mt-1">{step.title}</h3>
+                    <p className="text-muted text-sm mt-2 leading-relaxed">{step.desc}</p>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* KUNDEOMTALER */}
+        <section className="py-20 md:py-28 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading eyebrow="Kundeomtaler" title="Hva kundene sier om oss" />
+            <div className="mt-12 grid md:grid-cols-3 gap-6">
+              {testimonials.map((t, i) => (
+                <AnimatedSection key={t.name + i} delay={i * 0.1} className={i === 0 ? 'md:col-span-2' : ''}>
+                  <div className="bg-surface-blue rounded-3xl p-8 border border-line h-full flex flex-col">
+                    <div className="flex gap-1 text-brand mb-4">
+                      {[0, 1, 2, 3, 4].map((n) => <Star key={n} size={16} fill="currentColor" />)}
+                    </div>
+                    <Quote size={28} className="text-brand/20 mb-3" />
+                    <p className="text-ink-soft leading-relaxed flex-1">{t.text}</p>
+                    <div className="flex items-center gap-3 mt-6">
+                      {t.img && <img src={ucare(t.img, { w: 120 })} alt={t.name} className="w-11 h-11 rounded-full object-cover" loading="lazy" />}
+                      <div>
+                        <p className="font-display text-ink text-sm">{t.name}</p>
+                        <p className="text-muted text-xs">{t.role}</p>
                       </div>
-                      <h3 className="font-display text-xl text-stone-900 mb-3">{t.title}</h3>
-                      <p className="text-stone-500 leading-relaxed text-sm">{getServiceText(t)}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12 px-6 rounded-2xl border border-dashed border-stone-300 bg-white/40">
-                <p className="text-stone-400 text-lg">Velg et segment over for å se relevante tjenester.</p>
-              </div>
-            )}
-
-            {activeSegment === 'privat' && (
-              <div className="mt-10 flex items-start gap-4 bg-white/60 border border-stone-200 rounded-xl px-6 py-5 max-w-2xl mx-auto">
-                <div className="w-10 h-10 rounded-lg bg-[#1C1917]/5 flex items-center justify-center shrink-0 mt-0.5">
-                  <BadgeCheck size={20} className="text-[#864A28]" />
+                </AnimatedSection>
+              ))}
+              <AnimatedSection delay={0.2}>
+                <div className="accent-gradient rounded-3xl p-8 text-white h-full flex flex-col justify-center text-center">
+                  <div className="font-display text-6xl leading-none">4.9</div>
+                  <div className="flex gap-1 justify-center text-white my-3">
+                    {[0, 1, 2, 3, 4].map((n) => <Star key={n} size={16} fill="currentColor" />)}
+                  </div>
+                  <p className="text-white/85 text-sm">Snittvurdering fra kunder på utført ventilasjonsservice.</p>
                 </div>
-                <div>
-                  <p className="text-stone-700 text-sm leading-relaxed">
-                    <span className="font-semibold text-stone-900">Boligmappa-dokumentasjon:</span> Alt arbeid vi utfører dokumenteres i din Boligmappa. Vi hjelper deg også med å komme i gang med og bruke Boligmappa.
-                  </p>
-                </div>
-              </div>
-            )}
+              </AnimatedSection>
+            </div>
           </div>
-
-          <style>{`
-            @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(12px); }
-              to { opacity: 1; transform: translateY(0); }
-            }
-          `}</style>
         </section>
 
-        {/* VIDEO */}
-        <section className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-72 h-72 bg-[#864A28]/5 rounded-full blur-3xl" />
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <AnimatedSection>
-              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3 text-center">Se oss i arbeid</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-4">Hvorfor velge Totalbyggdrift?</h2>
-              <p className="text-[#F5F0E8]/60 text-center max-w-xl mx-auto mb-12">
-                Totalbyggdrift har over 30 års erfaring innen drift og vedlikehold.
-              </p>
-            </AnimatedSection>
+        {/* VI TAR OSS AV RESTEN OGSÅ */}
+        <section className="py-20 md:py-28 bg-surface">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading
+              eyebrow="Vi tar oss av resten også"
+              title="Dagens tjenester for drift og vedlikehold"
+              intro="Som tidligere leverer vi et komplett spekter av drifts- og vedlikeholdstjenester for næringsbygg, borettslag og privat."
+            />
 
             <AnimatedSection delay={0.1}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                {[
-                  { bg: 'https://player.vimeo.com/video/1177337076?background=1', full: 'https://player.vimeo.com/video/1177337076?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel' },
-                  { bg: 'https://player.vimeo.com/video/1177340468?background=1', full: 'https://player.vimeo.com/video/1177340468?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel 2' },
-                ].map((video, i) => (
-                  <div
-                    key={i}
-                    className="relative rounded-2xl overflow-hidden shadow-xl border border-[#F5F0E8]/10 group cursor-pointer"
-                    onClick={() => setFullscreenVideo(video.full)}
-                  >
+              <Link to={`/tjenester/${aggregat.slug}`} className="group block mt-12 mb-6 rounded-3xl overflow-hidden border border-line bg-ink text-white">
+                <div className="grid md:grid-cols-2">
+                  <div className="p-8 md:p-10">
+                    <p className="text-brand-soft text-xs font-semibold uppercase tracking-wider mb-3">{aggregat.eyebrow}</p>
+                    <h3 className="font-display text-2xl md:text-3xl mb-3">{aggregat.title}</h3>
+                    <p className="text-white/70 leading-relaxed mb-6">{aggregat.summary}</p>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2 mb-7 text-sm text-white/80">
+                      {aggregat.included.slice(0, 3).map((it) => (
+                        <span key={it} className="flex items-center gap-2"><Check size={15} className="text-brand-soft" />{it}</span>
+                      ))}
+                    </div>
+                    <span className="inline-flex items-center gap-2 text-white font-semibold group-hover:gap-3 transition-all">
+                      Be om befaring <ArrowRight size={17} />
+                    </span>
+                  </div>
+                  <div className="relative min-h-[220px]">
+                    <img src={ucare(aggregat.image, { w: 800 })} alt={aggregat.title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                  </div>
+                </div>
+              </Link>
+            </AnimatedSection>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {driftServices.filter((s) => s.slug !== 'serviceavtale').map((s, i) => (
+                <AnimatedSection key={s.slug} delay={(i % 3) * 0.06}>
+                  <Link to={`/tjenester/${s.slug}`} className="group block bg-white rounded-2xl p-6 border border-line hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 transition-all h-full">
+                    <span className="w-11 h-11 rounded-full bg-brand-tint flex items-center justify-center mb-4">
+                      <s.icon size={20} className="text-brand" />
+                    </span>
+                    <h3 className="font-display text-lg text-ink mb-1.5">{s.title}</h3>
+                    <p className="text-muted text-sm leading-relaxed">{s.summary}</p>
+                    <span className="inline-flex items-center gap-1.5 text-brand text-sm font-semibold mt-4 group-hover:gap-2.5 transition-all">
+                      Les mer <ArrowRight size={15} />
+                    </span>
+                  </Link>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* SE OSS I ARBEID */}
+        <section className="py-20 md:py-28 bg-ink relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-brand/10 rounded-full blur-3xl" />
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <SectionHeading
+              eyebrow="Se oss i arbeid"
+              title="Hvorfor velge Totalbyggdrift?"
+              intro="Lang erfaring innen drift, vedlikehold og ventilasjon — se hvordan vi jobber."
+              dark center
+            />
+            <AnimatedSection delay={0.1}>
+              <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                {videos.map((video, i) => (
+                  <div key={i} className="relative rounded-2xl overflow-hidden shadow-xl border border-white/10 group cursor-pointer" onClick={() => setFullscreenVideo(video.full)}>
                     <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
-                      <iframe
-                        src={video.bg}
-                        frameBorder="0"
-                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                        referrerPolicy="strict-origin-when-cross-origin"
-                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
-                        title={video.title}
-                      />
+                      <iframe src={video.bg} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin"
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }} title={video.title} />
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-16 h-16 rounded-full bg-[#1C1917]/50 backdrop-blur-sm border border-[#F5F0E8]/20 flex items-center justify-center group-hover:bg-[#1C1917]/70 group-hover:scale-110 transition-all duration-300">
-                        <Play size={28} className="text-[#F5F0E8] ml-1" fill="#F5F0E8" />
+                      <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Play size={26} className="text-white ml-1" fill="white" />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-
-              <div className="text-center mt-10">
-                <Link
-                  to="/kontakt"
-                  className="accent-gradient text-white font-medium px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#6B3B20]/20 inline-flex items-center gap-2"
-                >
-                  <Send size={18} />
-                  Ta kontakt
-                </Link>
-              </div>
-            </AnimatedSection>
-          </div>
-        </section>
-
-        {/* OM OSS */}
-        <section id="om" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-72 h-72 bg-[#864A28]/5 rounded-full blur-3xl" />
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-              <AnimatedSection>
-                <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3">Om oss</p>
-                <h2 className="font-display text-3xl md:text-4xl text-[#F5F0E8] mb-6">Erfaring du kan stole på</h2>
-                <div className="space-y-4 text-[#F5F0E8]/70 leading-relaxed">
-                  <p>
-                    Vi har lang erfaring innen automasjon, tekniske anlegg og praktisk vedlikehold.
-                    Med bakgrunn fra drift av basseng, tekniske styringssystemer og bygningsvedlikehold,
-                    tilbyr vi en bred og pålitelig tjeneste — enten du er næringsaktør, borettslag eller privatperson.
-                  </p>
-                </div>
-              </AnimatedSection>
-
-              <AnimatedSection delay={0.2}>
-                <div className="bg-[#292524]/40 rounded-2xl p-8 md:p-10 border border-[#F5F0E8]/5">
-                  <div className="grid grid-cols-2 gap-8">
-                    {[
-                      ['Automasjon', 'Teknisk styring og regulering'],
-                      ['Tekniske anlegg', 'Ventilasjon, varme, kjøling'],
-                      ['Bassengdrift', 'Drift og vedlikehold av basseng'],
-                      ['Regelverk', 'Kunnskap om krav og forskrifter'],
-                    ].map(([title, sub]) => (
-                      <div key={title}>
-                        <h4 className="font-display text-lg text-[#C4885C] mb-1">{title}</h4>
-                        <p className="text-[#F5F0E8]/50 text-sm">{sub}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </AnimatedSection>
-            </div>
-          </div>
-        </section>
-
-        {/* HVORFOR OSS */}
-        <section id="hvorfor" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection>
-              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">Hvorfor oss</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-16">Det som skiller oss ut</h2>
             </AnimatedSection>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {usper.map((u, i) => (
-                <AnimatedSection key={u.title} delay={i * 0.1}>
-                  <div className="text-center p-6">
-                    <div className="w-14 h-14 rounded-2xl accent-gradient flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#6B3B20]/15">
-                      <u.icon size={24} className="text-white" />
-                    </div>
-                    <h3 className="font-display text-lg text-stone-900 mb-2">{u.title}</h3>
-                    <p className="text-stone-500 text-sm leading-relaxed">{u.desc}</p>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* TESTIMONIALS */}
-        <section id="referanser" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-80 h-80 bg-[#864A28]/5 rounded-full blur-3xl" />
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <AnimatedSection>
-              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3 text-center">Referanser</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-16">Hva kundene sier</h2>
-            </AnimatedSection>
-
-            <AnimatedSection delay={0.1}>
-              <div className="max-w-3xl mx-auto bg-[#292524]/50 rounded-2xl p-8 md:p-12 border border-[#F5F0E8]/5">
-                <Quote size={36} className="text-[#864A28]/40 mb-6" />
-                <p className="text-[#F5F0E8]/80 leading-relaxed text-lg md:text-xl font-display italic mb-8">
-                  &ldquo;{testimonials[0].text}&rdquo;
-                </p>
-                <div className="flex items-center gap-4">
-                  <img
-                    src={testimonials[0].img}
-                    alt={testimonials[0].name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-[#864A28]/30"
-                  />
+            <AnimatedSection delay={0.15}>
+              <div className="mt-10 max-w-3xl mx-auto bg-white/5 border border-white/10 rounded-3xl px-8 py-7 flex flex-col sm:flex-row items-center justify-between gap-5">
+                <div className="flex items-start gap-4">
+                  <span className="w-11 h-11 rounded-full bg-brand/20 flex items-center justify-center shrink-0"><Building2 size={20} className="text-brand-soft" /></span>
                   <div>
-                    <p className="font-medium text-[#F5F0E8]">{testimonials[0].name}</p>
-                    <p className="text-[#F5F0E8]/50 text-sm">{testimonials[0].role}</p>
+                    <h3 className="font-display text-lg text-white">Egne avtaler for borettslag og næringsbygg</h3>
+                    <p className="text-white/60 text-sm mt-1">Fast kontaktperson, fleksible serviceavtaler og egne priser. Vi tilpasser oss bygget og budsjettet deres.</p>
                   </div>
                 </div>
+                <Button to="/bedrift" variant="white" size="sm" className="shrink-0">Be om tilbud</Button>
               </div>
             </AnimatedSection>
           </div>
         </section>
 
-        {/* GALLERI */}
-        <section id="galleri" className="py-20 md:py-28 bg-[#F5F0E8] bg-noise">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* CTA-BAND */}
+        <section className="py-20 md:py-24 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection>
-              <p className="text-[#864A28] font-medium text-sm tracking-widest uppercase mb-3 text-center">Vårt arbeid</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-stone-900 mb-4">Galleri</h2>
-              <p className="text-stone-500 text-center max-w-2xl mx-auto mb-16">
-                Et utvalg av prosjekter og oppdrag vi har utført for våre kunder.
-              </p>
-            </AnimatedSection>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[200px]">
-              {galleryItems.map((item, i) => (
-                <AnimatedSection key={item.id} delay={i * 0.08} className={item.span}>
-                  <div className="relative group w-full h-full rounded-2xl overflow-hidden border border-stone-100 cursor-pointer">
-                    <img src={item.img} alt={item.label} className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-[#1C1917]/0 group-hover:bg-[#1C1917]/60 transition-colors duration-300 flex items-end p-5">
-                      <p className="text-[#F5F0E8] text-sm font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        {item.label}
-                      </p>
-                    </div>
+              <div className="accent-gradient rounded-[2rem] px-8 py-14 md:py-16 text-center text-white relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+                <div className="relative">
+                  <h2 className="font-display text-3xl md:text-4xl mb-4">Klar for friskere luft?</h2>
+                  <p className="text-white/85 max-w-xl mx-auto mb-9">
+                    Bestill en uforpliktende befaring, så finner vi riktig service for ditt anlegg.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button href="tel:+4746405965" variant="white" size="lg"><Phone size={18} /> Ring 464 05 965</Button>
+                    <Button to="/kontakt" variant="ghostLight" size="lg">Send forespørsel</Button>
                   </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* KONTAKT */}
-        <section id="kontakt" className="py-20 md:py-28 bg-[#1C1917] bg-noise relative overflow-hidden">
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#864A28]/5 rounded-full blur-3xl" />
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <AnimatedSection>
-              <p className="text-[#C4885C] font-medium text-sm tracking-widest uppercase mb-3 text-center">Kontakt</p>
-              <h2 className="font-display text-3xl md:text-4xl text-center text-[#F5F0E8] mb-4">Ta kontakt med oss</h2>
-              <p className="text-[#F5F0E8]/60 text-center max-w-xl mx-auto mb-16">
-                Har du spørsmål eller ønsker et uforpliktende tilbud? Fyll ut skjemaet, så tar vi kontakt.
-              </p>
+                </div>
+              </div>
             </AnimatedSection>
-
-            <div className="grid md:grid-cols-5 gap-12 md:gap-16">
-              <AnimatedSection className="md:col-span-3">
-                <ContactForm defaultSegment={segmentDefault} />
-              </AnimatedSection>
-              <AnimatedSection className="md:col-span-2" delay={0.15}>
-                <ContactInfo />
-              </AnimatedSection>
-            </div>
           </div>
         </section>
 
@@ -527,26 +345,14 @@ export default function HomePage() {
       </div>
 
       {fullscreenVideo && (
-        <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setFullscreenVideo(null)}
-        >
-          <button
-            onClick={() => setFullscreenVideo(null)}
-            className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-          >
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setFullscreenVideo(null)}>
+          <button onClick={() => setFullscreenVideo(null)} className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors">
             <X size={20} />
           </button>
           <div className="w-full max-w-md rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
-              <iframe
-                src={fullscreenVideo}
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                title="Totalbyggdrift Video"
-              />
+              <iframe src={fullscreenVideo} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} title="Totalbyggdrift video" />
             </div>
           </div>
         </div>

@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+/* Blå «frisk luft»-designsystem (Totalbyggdrift redesign 2026) */
+@theme {
+  --color-brand: #3c7df0;
+  --color-brand-dark: #2f6fe0;
+  --color-brand-soft: #7eacf4;
+  --color-brand-tint: #e7f0fd;
+
+  --color-ink: #0f1a2a;
+  --color-ink-soft: #33485e;
+  --color-muted: #5a6b7d;
+  --color-faint: #9fb2c6;
+
+  --color-surface: #f5f8fc;
+  --color-surface-blue: #eef5fd;
+  --color-line: #e6ebf1;
+
+  --font-display: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+}

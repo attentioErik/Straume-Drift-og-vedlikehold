@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import ContactForm from '../components/ContactForm';
 import ContactInfo from '../components/ContactInfo';
 import Seo from '../components/Seo';
+import { ucare } from '../utils/img';
 
 const bullets = [
   'Fast oppfølging',
@@ -34,7 +35,7 @@ export default function UteomraderPage() {
         <section className="relative min-h-screen flex items-center pt-16">
           <div className="absolute inset-0">
             <img
-              src={HERO_IMAGE}
+              src={ucare(HERO_IMAGE, { w: 1600 })}
               alt="Drift og vedlikehold av uteområder"
               className="w-full h-full object-cover"
             />
@@ -157,7 +158,7 @@ export default function UteomraderPage() {
 
             <div className="grid md:grid-cols-5 gap-12 md:gap-16">
               <AnimatedSection className="md:col-span-3">
-                <ContactForm defaultSegment="Borettslag / sameie" />
+                <ContactForm defaultSegment="Bedrift" source="Uteområder-landingsside" />
               </AnimatedSection>
               <AnimatedSection className="md:col-span-2" delay={0.15}>
                 <ContactInfo />

@@ -1,72 +1,54 @@
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Phone } from 'lucide-react';
+import { ucare } from '../utils/img';
+import Button from './ui/Button';
 
-const SECTIONS = [
-  ['tjenester', 'Tjenester'],
-  ['om', 'Om oss'],
-  ['hvorfor', 'Hvorfor oss'],
-  ['referanser', 'Referanser'],
-  ['galleri', 'Galleri'],
+const LOGO = 'https://ucarecdn.com/30423fd5-034d-4a17-b174-0e026d344528/';
+
+const LINKS = [
+  ['/privat', 'Privat'],
+  ['/bedrift', 'Bedrift'],
+  ['/tjenester', 'Tjenester'],
+  ['/om-oss', 'Om oss'],
+  ['/referanser', 'Referanser'],
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const isHome = location.pathname === '/';
 
-  const handleSectionClick = (id) => {
-    setMenuOpen(false);
-    if (isHome) {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate(`/#${id}`);
-    }
-  };
-
-  const handleLogoClick = () => {
-    setMenuOpen(false);
-    if (isHome) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      navigate('/');
-    }
-  };
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1C1917]/95 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-line">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <button onClick={handleLogoClick}>
-          <img src="https://ucarecdn.com/73413fc5-89f7-40af-b5ad-602c75a7d606/logo_white_transperant300x.png" alt="Totalbyggdrift" className="h-8" />
-        </button>
+        <Link to="/" onClick={() => setMenuOpen(false)} className="flex items-center">
+          <img src={ucare(LOGO, { w: 280 })} alt="Totalbyggdrift" className="h-7" />
+        </Link>
 
-        <div className="hidden md:flex items-center gap-8 text-sm text-[#F5F0E8]/80">
-          {SECTIONS.map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => handleSectionClick(id)}
-              className="hover:text-[#C4885C] transition-colors duration-200"
+        <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-ink-soft">
+          {LINKS.map(([to, label]) => (
+            <Link
+              key={to}
+              to={to}
+              className={`transition-colors duration-200 hover:text-brand ${isActive(to) ? 'text-brand' : ''}`}
             >
               {label}
-            </button>
+            </Link>
           ))}
-          <Link
-            to="/kontakt"
-            className="hover:text-[#C4885C] transition-colors duration-200"
+          <a
+            href="tel:+4746405965"
+            className="flex items-center gap-2 text-ink hover:text-brand transition-colors"
           >
-            Kontakt
-          </Link>
-          <Link
-            to="/kontakt"
-            className="accent-gradient text-white text-sm font-medium px-5 py-2 rounded-lg hover:opacity-90 transition-opacity"
-          >
-            Ta kontakt
-          </Link>
+            <Phone size={15} className="text-brand" />
+            464 05 965
+          </a>
+          <Button to="/kontakt" size="sm">Bestill befaring</Button>
         </div>
 
         <button
-          className="md:hidden text-[#F5F0E8]"
+          className="lg:hidden text-ink flex items-center justify-center min-h-[44px] min-w-[44px] -mr-2"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Meny"
         >
@@ -75,23 +57,27 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-[#1C1917] border-t border-white/10 px-4 pb-4 space-y-3">
-          {SECTIONS.map(([id, label]) => (
-            <button
-              key={id}
-              onClick={() => handleSectionClick(id)}
-              className="block w-full text-left text-[#F5F0E8]/80 hover:text-[#C4885C] py-2 transition-colors"
+        <div className="lg:hidden bg-white border-t border-line px-4 pb-5 pt-2 space-y-1">
+          {LINKS.map(([to, label]) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setMenuOpen(false)}
+              className="block w-full text-ink-soft hover:text-brand py-2.5 font-medium transition-colors"
             >
               {label}
-            </button>
+            </Link>
           ))}
-          <Link
-            to="/kontakt"
-            onClick={() => setMenuOpen(false)}
-            className="block w-full text-left text-[#F5F0E8]/80 hover:text-[#C4885C] py-2 transition-colors"
+          <a
+            href="tel:+4746405965"
+            className="flex items-center gap-2 text-ink py-2.5 font-medium"
           >
-            Kontakt
-          </Link>
+            <Phone size={16} className="text-brand" />
+            464 05 965
+          </a>
+          <Button to="/kontakt" className="w-full mt-2" onClick={() => setMenuOpen(false)}>
+            Bestill befaring
+          </Button>
         </div>
       )}
     </nav>
