@@ -10,6 +10,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import Button from '../components/ui/Button';
 import PriceCard from '../components/ui/PriceCard';
 import InnkjopsgruppenSection from '../components/InnkjopsgruppenSection';
+import HlsVideo from '../components/HlsVideo';
 import Seo from '../components/Seo';
 import { ucare } from '../utils/img';
 import { ventilasjonServices, driftServices, getService } from '../data/services';
@@ -290,10 +291,17 @@ export default function HomePage() {
             <AnimatedSection delay={0.1}>
               <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
                 {videos.map((video, i) => (
-                  <div key={i} className="relative rounded-2xl overflow-hidden shadow-xl border border-white/10 group cursor-pointer" onClick={() => setFullscreenVideo(video.full)}>
+                  <div key={i} className="relative rounded-2xl overflow-hidden shadow-xl border border-white/10 group cursor-pointer" onClick={() => setFullscreenVideo(video.src)}>
                     <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
-                      <iframe src={video.bg} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin"
-                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }} title={video.title} />
+                      <HlsVideo
+                        src={video.src}
+                        autoPlay
+                        muted
+                        loop
+                        title={video.title}
+                        className="absolute top-0 left-0 w-full h-full object-cover"
+                        style={{ pointerEvents: 'none' }}
+                      />
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                       <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -351,8 +359,13 @@ export default function HomePage() {
           </button>
           <div className="w-full max-w-md rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
             <div style={{ padding: '177.78% 0 0 0', position: 'relative' }}>
-              <iframe src={fullscreenVideo} frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin"
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} title="Totalbyggdrift video" />
+              <HlsVideo
+                src={fullscreenVideo}
+                autoPlay
+                controls
+                title="Totalbyggdrift video"
+                className="absolute top-0 left-0 w-full h-full bg-black"
+              />
             </div>
           </div>
         </div>

@@ -45,8 +45,8 @@ export const testimonials = [
 ];
 
 export const videos = [
-  { bg: 'https://player.vimeo.com/video/1177337076?background=1', full: 'https://player.vimeo.com/video/1177337076?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel' },
-  { bg: 'https://player.vimeo.com/video/1177340468?background=1', full: 'https://player.vimeo.com/video/1177340468?autoplay=1&title=0&byline=0&portrait=0', title: 'Totalbyggdrift Reel 2' },
+  { src: 'https://ucarecdn.com/b2ed2ee8-d1a2-4b1d-a109-710fff5d55f3/adaptive_video/', title: 'Totalbyggdrift Reel' },
+  { src: 'https://ucarecdn.com/fa9466d6-07ac-4ea8-8ece-92be8235530d/adaptive_video/', title: 'Totalbyggdrift Reel 2' },
 ];
 
 export const galleryItems = [
