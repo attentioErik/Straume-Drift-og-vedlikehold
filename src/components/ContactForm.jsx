@@ -21,6 +21,7 @@ export default function ContactForm({
     navn: '',
     epost: '',
     telefon: '',
+    adresse: '',
     melding: '',
   });
   const [formSent, setFormSent] = useState(false);
@@ -36,6 +37,7 @@ export default function ContactForm({
       navn: formData.navn,
       epost: formData.epost,
       telefon: formData.telefon,
+      adresse: formData.adresse,
       melding: formData.melding,
       segment: formData.segment,
     };
@@ -52,7 +54,7 @@ export default function ContactForm({
       // still show success to the user
     }
     setFormSent(true);
-    setFormData({ segment: defaultSegment, tjeneste: '', navn: '', epost: '', telefon: '', melding: '' });
+    setFormData({ segment: defaultSegment, tjeneste: '', navn: '', epost: '', telefon: '', adresse: '', melding: '' });
   };
 
   if (formSent) {
@@ -118,22 +120,28 @@ export default function ContactForm({
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-ink-soft text-sm font-medium mb-2">Navn</label>
-          <input type="text" required value={formData.navn}
+          <input type="text" required autoComplete="name" value={formData.navn}
             onChange={(e) => setFormData({ ...formData, navn: e.target.value })}
             className={INPUT} placeholder="Ditt navn" />
         </div>
         <div>
           <label className="block text-ink-soft text-sm font-medium mb-2">Telefon</label>
-          <input type="tel" value={formData.telefon}
+          <input type="tel" required inputMode="tel" autoComplete="tel" value={formData.telefon}
             onChange={(e) => setFormData({ ...formData, telefon: e.target.value })}
             className={INPUT} placeholder="Ditt telefonnummer" />
         </div>
       </div>
       <div>
         <label className="block text-ink-soft text-sm font-medium mb-2">E-post</label>
-        <input type="email" required value={formData.epost}
+        <input type="email" required autoComplete="email" value={formData.epost}
           onChange={(e) => setFormData({ ...formData, epost: e.target.value })}
           className={INPUT} placeholder="din@epost.no" />
+      </div>
+      <div>
+        <label className="block text-ink-soft text-sm font-medium mb-2">Adresse</label>
+        <input type="text" required autoComplete="street-address" value={formData.adresse}
+          onChange={(e) => setFormData({ ...formData, adresse: e.target.value })}
+          className={INPUT} placeholder="Gateadresse, postnr. og sted" />
       </div>
       <div>
         <label className="block text-ink-soft text-sm font-medium mb-2">Melding</label>
